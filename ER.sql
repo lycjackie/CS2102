@@ -22,6 +22,7 @@ CREATE TABLE "Roles" (
 CREATE TABLE "Car" (
 	"Model" varchar(64) NOT NULL,
 	"Maker" varchar(64) NOT NULL,
+	"Seats" numeric(64) NOT NULL,
 	CONSTRAINT Car_pk PRIMARY KEY ("Model")
 ) WITH (
   OIDS=FALSE
@@ -52,10 +53,12 @@ CREATE TABLE "UserRole" (
 
 CREATE TABLE "Rides" (
 	"RideId" serial NOT NULL,
-	"Owner" varchar(64) NOT NULL,
+	"Driver" varchar(64) NOT NULL,
 	"RideDateTime" DATE NOT NULL,
+	"RideEndTime" DATE NOT NULL,
 	"Origin" varchar(64) NOT NULL,
 	"Destination" varchar(64) NOT NULL,
+	"Status" varchar(64) NOT NULL,
 	CONSTRAINT Rides_pk PRIMARY KEY ("RideId")
 ) WITH (
   OIDS=FALSE
@@ -66,7 +69,8 @@ CREATE TABLE "Rides" (
 CREATE TABLE "RideBids" (
 	"UserBid" varchar(64) NOT NULL,
 	"RideId" int NOT NULL,
-	"BidPrice" numeric NOT NULL
+	"BidPrice" numeric NOT NULL,
+	"Passengers" numeric NOT NULL
 ) WITH (
   OIDS=FALSE
 );
@@ -82,8 +86,7 @@ ALTER TABLE "UserCar" ADD CONSTRAINT "UserCar_fk1" FOREIGN KEY ("NRIC") REFERENC
 ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_fk0" FOREIGN KEY ("User_NRIC") REFERENCES "Users"("NRIC");
 ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_fk1" FOREIGN KEY ("RoleId") REFERENCES "Roles"("RoleId");
 
-ALTER TABLE "Rides" ADD CONSTRAINT "Rides_fk0" FOREIGN KEY ("Owner") REFERENCES "Users"("NRIC");
+ALTER TABLE "Rides" ADD CONSTRAINT "Rides_fk0" FOREIGN KEY ("Driver") REFERENCES "Users"("NRIC");
 
 ALTER TABLE "RideBids" ADD CONSTRAINT "RideBids_fk0" FOREIGN KEY ("UserBid") REFERENCES "Users"("NRIC");
 ALTER TABLE "RideBids" ADD CONSTRAINT "RideBids_fk1" FOREIGN KEY ("RideId") REFERENCES "Rides"("RideId");
-
