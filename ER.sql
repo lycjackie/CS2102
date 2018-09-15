@@ -1,92 +1,81 @@
-CREATE TABLE "Users" (
-	"Name" varchar(64) NOT NULL,
-	"NRIC" varchar(64) NOT NULL,
-	"Contact" numeric NOT NULL,
-	CONSTRAINT Users_pk PRIMARY KEY ("NRIC")
-) WITH (
-  OIDS=FALSE
+create table if not exists "Car"
+(
+  "Model" varchar(64) not null
+    constraint car_pk
+    primary key,
+  "Maker" varchar(64) not null,
+  "Seats" numeric(64) not null
 );
 
-
-
-CREATE TABLE "Roles" (
-	"RoleId" serial NOT NULL,
-	"RoleName" varchar(64) NOT NULL UNIQUE,
-	CONSTRAINT Roles_pk PRIMARY KEY ("RoleId")
-) WITH (
-  OIDS=FALSE
+create table if not exists "Users"
+(
+  "Name"    varchar(64) not null,
+  "NRIC"    varchar(64) not null
+    constraint users_pk
+    primary key,
+  "Contact" numeric     not null
 );
 
-
-
-CREATE TABLE "Car" (
-	"Model" varchar(64) NOT NULL,
-	"Maker" varchar(64) NOT NULL,
-	"Seats" numeric(64) NOT NULL,
-	CONSTRAINT Car_pk PRIMARY KEY ("Model")
-) WITH (
-  OIDS=FALSE
+create table if not exists "UserCar"
+(
+  "VehicleNo" varchar(12) not null
+    constraint usercar_pk
+    primary key,
+  "Color"     varchar(64) not null,
+  "Model"     varchar(64) not null
+    constraint "UserCar_fk0"
+    references "Car",
+  "NRIC"      varchar(64) not null
+    constraint "UserCar_fk1"
+    references "Users"
 );
 
-
-
-CREATE TABLE "UserCar" (
-	"VehicleNo" varchar(12) NOT NULL,
-	"Color" varchar(64) NOT NULL,
-	"Model" varchar(64) NOT NULL,
-	"NRIC" varchar(64) NOT NULL,
-	CONSTRAINT UserCar_pk PRIMARY KEY ("VehicleNo")
-) WITH (
-  OIDS=FALSE
+create table if not exists "Rides"
+(
+  "RideId"       serial      not null
+    constraint rides_pk
+    primary key,
+  "Driver"       varchar(64) not null
+    constraint "Rides_fk0"
+    references "Users",
+  "RideDateTime" date        not null,
+  "RideEndTime"  date        not null,
+  "Origin"       varchar(64) not null,
+  "Destination"  varchar(64) not null,
+  "Status"       varchar(64) not null
 );
 
-
-
-CREATE TABLE "UserRole" (
-	"User_NRIC" varchar(64) NOT NULL,
-	"RoleId" int NOT NULL
-) WITH (
-  OIDS=FALSE
+create table if not exists "RideBids"
+(
+  "UserBid"    varchar(64) not null
+    constraint "RideBids_fk0"
+    references "Users",
+  "RideId"     integer     not null
+    constraint "RideBids_fk1"
+    references "Rides",
+  "BidPrice"   numeric     not null,
+  "Passengers" numeric     not null
 );
 
-
-
-CREATE TABLE "Rides" (
-	"RideId" serial NOT NULL,
-	"Driver" varchar(64) NOT NULL,
-	"RideDateTime" DATE NOT NULL,
-	"RideEndTime" DATE NOT NULL,
-	"Origin" varchar(64) NOT NULL,
-	"Destination" varchar(64) NOT NULL,
-	"Status" varchar(64) NOT NULL,
-	CONSTRAINT Rides_pk PRIMARY KEY ("RideId")
-) WITH (
-  OIDS=FALSE
+create table if not exists "Roles"
+(
+  "RoleId"   serial      not null
+    constraint "Roles_pkey"
+    primary key,
+  "RoleName" varchar(64) not null
+    constraint "Roles_RoleName_key"
+    unique
 );
 
-
-
-CREATE TABLE "RideBids" (
-	"UserBid" varchar(64) NOT NULL,
-	"RideId" int NOT NULL,
-	"BidPrice" numeric NOT NULL,
-	"Passengers" numeric NOT NULL
-) WITH (
-  OIDS=FALSE
+create table if not exists "UserRole"
+(
+  "User_NRIC" varchar(64) not null
+    constraint "UserRole_fk0"
+    references "Users"
+    on delete cascade,
+  "RoleId"    integer     not null
+    constraint "UserRole_fk1"
+    references "Roles"
+    on delete cascade
 );
 
-
-
-
-
-
-ALTER TABLE "UserCar" ADD CONSTRAINT "UserCar_fk0" FOREIGN KEY ("Model") REFERENCES "Car"("Model");
-ALTER TABLE "UserCar" ADD CONSTRAINT "UserCar_fk1" FOREIGN KEY ("NRIC") REFERENCES "Users"("NRIC");
-
-ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_fk0" FOREIGN KEY ("User_NRIC") REFERENCES "Users"("NRIC");
-ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_fk1" FOREIGN KEY ("RoleId") REFERENCES "Roles"("RoleId");
-
-ALTER TABLE "Rides" ADD CONSTRAINT "Rides_fk0" FOREIGN KEY ("Driver") REFERENCES "Users"("NRIC");
-
-ALTER TABLE "RideBids" ADD CONSTRAINT "RideBids_fk0" FOREIGN KEY ("UserBid") REFERENCES "Users"("NRIC");
-ALTER TABLE "RideBids" ADD CONSTRAINT "RideBids_fk1" FOREIGN KEY ("RideId") REFERENCES "Rides"("RideId");
