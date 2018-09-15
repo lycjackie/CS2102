@@ -13,7 +13,7 @@ db = connect()
 '''
 def addUser(user):
     sql = "INSERT INTO \"Users\" VALUES (%s,%s,%s) RETURNING \"NRIC\";"
-
+    s = None
     try:
         cur = db.cursor()
 
@@ -31,8 +31,31 @@ def addUser(user):
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+    finally:
+        if db is not None:
+            db.close()
 
-    return
+    return s
+
+
+
+def retrieveUser(user):
+    sql = "SELECT * FROM \"Users\" Where \"NRIC\" = %s;"
+    res = None
+    try:
+        cur = db.cursor()
+        cur.execute(sql,(user['nric'],)) # need 1 comma behind if only using 1 parameter.
+        res = cur.fetchone() # should only return 1 result
+
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if db is not None:
+            db.close()
+
+    return res
+
 
 if __name__ == '__main__':
     test_user = {
@@ -41,4 +64,5 @@ if __name__ == '__main__':
         'contact': 99112233,
         'role': 3
     }
-    addUser(test_user)
+    #addUser(test_user)
+    print retrieveUser(test_user)
