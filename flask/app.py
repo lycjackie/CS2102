@@ -4,17 +4,19 @@ import psycopg2
 import importlib
 
 app = Flask(__name__, template_folder='templates')
-users = importlib.import_module("data.users")
+ride = importlib.import_module("data.rides")
 
 @app.route('/')
 def main():
+    '''
     test_user = {
         'name':'jackie',
         'nric':'123456',
         'contact': 99112233,
         'role': 3
     }
-    list = users.retrieveUser(test_user);
+    '''
+    list = ride.retrieveAllRide();
     return render_template('index.html', users = list);
 
 if __name__ == '__main__':
