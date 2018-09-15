@@ -1,8 +1,6 @@
 import psycopg2
 from dbconfig import connect
 
-
-db = connect()
 '''
 	CREATE TABLE "Users" (
 	"Name" varchar(64) NOT NULL,
@@ -14,6 +12,7 @@ db = connect()
 def addUser(user):
     sql = "INSERT INTO \"Users\" VALUES (%s,%s,%s) RETURNING \"NRIC\";"
     s = None
+    db = connect()
     try:
         cur = db.cursor()
 
@@ -41,11 +40,17 @@ def addUser(user):
 
 def retrieveUser(user):
     sql = "SELECT * FROM \"Users\" Where \"NRIC\" = %s;"
-    res = None
+    res = []
+    db = connect()
     try:
         cur = db.cursor()
-        cur.execute(sql,(user['nric'],)) # need 1 comma behind if only using 1 parameter.
-        res = cur.fetchone() # should only return 1 result
+        no_rows = cur.execute(sql,(user['nric'],)) # need 1 comma behind if only using 1 parameter.
+
+        while True: # loop cursor and retrieve results
+			row = cur.fetchone() # should only return 1 result
+			if row == None:
+				break
+			res.append(row)
 
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:

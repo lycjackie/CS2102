@@ -132,8 +132,9 @@
       <div class="routing-heading">
         <div class="mui--text-subhead">Available Routes</div>
       </div>
+      {% for user in users %}
       <div class="route-option">
-        <div class="padding-with-circle mui--text-title">A01</div>
+        <div class="padding-with-circle mui--text-title">{{user[0]}}</div>
         <br/>
         <div class="mui-container-fluid">
           <div class="mui-row">
@@ -157,81 +158,7 @@
           </div>
         </div>
       </div>
-      <div class="route-option">
-        <div class="padding-with-circle mui--text-title">A02</div>
-        <br/>
-        <div class="mui-container-fluid">
-          <div class="mui-row">
-            <div class="auto-width center-content mui-col-md-1" style="height:24px">
-              <div class="circle green"></div>
-            </div>
-            <div class="auto-width mui-col-md-11">
-              <span class="time-info mui--text-body2">07:05</span>
-              <span class="location-info mui--text-body1">Lau Pa sat</span>
-            </div>
-          </div>
-          <br/>
-          <div class="mui-row">
-            <div class="auto-width center-content mui-col-md-1" style="height:24px">
-              <div class="circle red"></div>
-            </div>
-            <div class="auto-width mui-col-md-11">
-              <span class="time-info mui--text-body2">07:49</span>
-              <span class="location-info mui--text-body1">Newton MRT</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="route-option">
-        <div class="padding-with-circle mui--text-title">A03</div>
-        <br/>
-        <div class="mui-container-fluid">
-          <div class="mui-row">
-            <div class="auto-width center-content mui-col-md-1" style="height:24px">
-              <div class="circle green"></div>
-            </div>
-            <div class="auto-width mui-col-md-11">
-              <span class="time-info mui--text-body2">07:05</span>
-              <span class="location-info mui--text-body1">Lau Pa sat</span>
-            </div>
-          </div>
-          <br/>
-          <div class="mui-row">
-            <div class="auto-width center-content mui-col-md-1" style="height:24px">
-              <div class="circle red"></div>
-            </div>
-            <div class="auto-width mui-col-md-11">
-              <span class="time-info mui--text-body2">07:49</span>
-              <span class="location-info mui--text-body1">Newton MRT</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="route-option">
-        <div class="padding-with-circle mui--text-title">A04</div>
-        <br/>
-        <div class="mui-container-fluid">
-          <div class="mui-row">
-            <div class="auto-width center-content mui-col-md-1" style="height:24px">
-              <div class="circle green"></div>
-            </div>
-            <div class="auto-width mui-col-md-11">
-              <span class="time-info mui--text-body2">07:05</span>
-              <span class="location-info mui--text-body1">Lau Pa sat</span>
-            </div>
-          </div>
-          <br/>
-          <div class="mui-row">
-            <div class="auto-width center-content mui-col-md-1" style="height:24px">
-              <div class="circle red"></div>
-            </div>
-            <div class="auto-width mui-col-md-11">
-              <span class="time-info mui--text-body2">07:49</span>
-              <span class="location-info mui--text-body1">Newton MRT</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </body>
 </html>

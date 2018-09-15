@@ -2,7 +2,7 @@
 from configparser import ConfigParser
 import psycopg2
 
-def config(filename='database.ini', section='postgresql'):
+def config(filename='data/database.ini', section='postgresql'): # filename is relative to calling path for server init
     # create a parser
     parser = ConfigParser()
     # read config file
