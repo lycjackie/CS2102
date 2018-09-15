@@ -1,7 +1,7 @@
 CREATE TABLE "Users" (
 	"Name" varchar(64) NOT NULL,
-	"NRIC" serial(64) NOT NULL,
-	"Contact" numeric(64) NOT NULL,
+	"NRIC" varchar(64) NOT NULL,
+	"Contact" numeric NOT NULL,
 	CONSTRAINT Users_pk PRIMARY KEY ("NRIC")
 ) WITH (
   OIDS=FALSE
@@ -44,7 +44,7 @@ CREATE TABLE "UserCar" (
 
 CREATE TABLE "UserRole" (
 	"User_NRIC" varchar(64) NOT NULL,
-	"RoleId" int(64) NOT NULL
+	"RoleId" int NOT NULL
 ) WITH (
   OIDS=FALSE
 );
