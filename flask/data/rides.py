@@ -50,7 +50,10 @@ def addRide(ride_details):
 
 def retrieveAllRide():
 
-    sql = """ SELECT * FROM \"Rides\" """
+    sql = """ SELECT u.\"Name\",r.\"Origin\",r.\"Destination\",r.\"Status\"
+    FROM \"Rides\" r,\"Users\" u
+    WHERE r.\"Driver\" = u.\"NRIC\"
+     """
     db = connect()
     res = None
     try:
@@ -78,4 +81,4 @@ if __name__ == '__main__':
     #print addRide(test_user)
     res = retrieveAllRide()
     for ride in res:
-        print ride.Status # use NamedTuple
+        print "Driver {} is {} to go from {} to {}".format(ride.Name,ride.Status,ride.Origin,ride.Destination) # use NamedTuple
