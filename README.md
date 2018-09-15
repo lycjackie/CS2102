@@ -16,8 +16,8 @@ Yay
 > GUI Tools available at https://www.jetbrains.com/datagrip/?fromMenu
 > Alternatively you can source for your own one. Jetbrains has student account.
 ```
-URL  :  cs2107.jackielyc.me 
-Port :  5432 
+URL  :  cs2107.jackielyc.me
+Port :  5432
 Database : cs2102_project
 ```
 
@@ -25,4 +25,12 @@ Use any GUI tools or cmd prompt to connect.
 
 ```
 psql -h cs2107.jackielyc.me -U cs2102_admin --dbname=cs2102_project
+```
+
+## Flask app
+
+> UI documentation available at https://www.muicss.com/
+
+```
+flask run
 ```
