@@ -61,7 +61,7 @@ def updateRide():
         return redirect('/')
     else:
         user = ride.retrieveRide(rideId)
-        return render_template('updateRide.html', user=user);
+        return redirect('/')
 
 
 
