@@ -54,6 +54,17 @@
         right: 15px;
       }
 
+      .create-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+      }
+
+      .create-btn > .icon {
+        font-size: 4em;
+        color: #19b5fe;
+      }
+
       .time-info {
         font-size: 20px;
         font-weight: bold;
@@ -175,6 +186,9 @@
         </div>
       </div>
       {% endfor %}
+      <button class="create-btn" onclick="">
+        <i class="icon material-icons">add_circle</i>
+      </button>
     </div>
   </body>
 </html>
