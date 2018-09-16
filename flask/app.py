@@ -1,9 +1,11 @@
 #!/usr/bin/python
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request
+
 import psycopg2
 import datetime as dt
 import importlib
 import random
+import urlparse
 
 app = Flask(__name__, template_folder='templates')
 ride = importlib.import_module("data.rides")
@@ -31,9 +33,37 @@ def main():
         'role': 3
     }
     '''
-    ride.addRide(test_driver);	
+    #ride.addRide(test_driver);
     list = ride.retrieveAllRide();
     return render_template('index.html', users = list);
+
+@app.route('/updateRide')
+def renderUpdateRide():
+    rideId = request.args.get('rideid')
+    if rideId is None:
+        return redirect('/')
+    else:
+        try:
+            rideId = int(rideId)
+            user = ride.retrieveRide(rideId)
+            return render_template('updateRide.html', user=user);
+        except ValueError:
+            return redirect('/')
+
+
+@app.route("/updateRide", methods=['POST'])
+def updateRide():
+    newOrigin = request.form['newOrigin']
+    newDestination = request.form['newDestination']
+    rideId = request.args.get('rideid')
+    ride.updateRide(rideId, newOrigin, newDestination)
+    if rideId is None:
+        return redirect('/')
+    else:
+        user = ride.retrieveRide(rideId)
+        return render_template('updateRide.html', user=user);
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

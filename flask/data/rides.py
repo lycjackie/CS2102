@@ -50,9 +50,10 @@ def addRide(ride_details):
 
 def retrieveAllRide():
 
-    sql = """ SELECT u.\"Name\",r.\"Origin\",r.\"Destination\",r.\"Status\"
+    sql = """ SELECT u.\"Name\",r.\"Origin\",r.\"Destination\",r.\"Status\",r.\"RideId\"
     FROM \"Rides\" r,\"Users\" u
     WHERE r.\"Driver\" = u.\"NRIC\"
+    ORDER BY r.\"RideDateTime\" ASC
      """
     db = connect()
     res = None
@@ -67,6 +68,47 @@ def retrieveAllRide():
         if db is not None:
             db.close()
     return res
+
+def retrieveRide(rideId):
+
+    sql = """ SELECT u.\"Name\",r.\"Origin\",r.\"Destination\",r.\"Status\"
+    FROM \"Rides\" r,\"Users\" u
+    WHERE r.\"Driver\" = u.\"NRIC\"
+    AND r.\"RideId\" = %s
+     """
+    db = connect()
+    res = None
+    try:
+        cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+        cur.execute(sql, (rideId,))
+        res = cur.fetchone()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print error
+    finally:
+        if db is not None:
+            db.close()
+    return res
+
+def updateRide(rideId, newOrigin, newDestination):
+
+    sql = """ UPDATE \"Rides\"
+    SET \"Origin\" = %s, \"Destination\" = %s
+    WHERE \"RideId\" = %s
+     """
+    db = connect()
+    res = None
+    try:
+        cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+        cur.execute(sql, (newOrigin, newDestination, rideId,))
+        db.commit()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print error
+    finally:
+        if db is not None:
+            db.close()
+    return
 
 if __name__ == '__main__':
     test_user = {
