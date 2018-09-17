@@ -185,10 +185,12 @@
           </button>
         </div>
       </div>
-      {% endfor %}
-      <button class="create-btn" onclick="">
+     
+      <button class="create-btn" onclick="location.href = '/addRide?nric={{ user.NRIC }}'">
         <i class="icon material-icons">add_circle</i>
       </button>
+	  
+	   {% endfor %}
     </div>
   </body>
 </html>

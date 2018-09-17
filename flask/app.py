@@ -9,19 +9,7 @@ import urlparse
 
 app = Flask(__name__, template_folder='templates')
 ride = importlib.import_module("data.rides")
-
-origin = ["Toa Payoh", "NUS", "Woodlands", "Somewhere", "Orchard", "Sentosa"]
-destination = ["Punggol", "Buona Vista", "Paya Lebar", "Over There", "Ghim Moh", "Yew Tee"]
-currentDT = dt.datetime.now()
-
-test_driver = {
-	    'Driver':'123456',
-        'RideDateTime': dt.date(currentDT.year,currentDT.month,currentDT.day),
-        'RideEndTime': dt.time(currentDT.hour,currentDT.minute),
-        'Origin': str(origin[random.randint(0,5)]),
-        'Destination': str(destination[random.randint(0,5)]),
-        'Status': 'NOT_YET_GONE'
-    }
+user = importlib.import_module("data.users")
 
 @app.route('/')
 def main():
@@ -33,7 +21,6 @@ def main():
         'role': 3
     }
     '''
-    #ride.addRide(test_driver);
     list = ride.retrieveAllRide();
     return render_template('index.html', users = list);
 
@@ -62,8 +49,40 @@ def updateRide():
     else:
         user = ride.retrieveRide(rideId)
         return redirect('/')
+		
 
+@app.route('/addRide')
+def renderAddRide():
+    nric = request.args.get('nric')
+    if nric is None:
+        return redirect('/')
+    else:
+        try:
+            nric = int(nric)
+            #users = user.retrieveUser(nric)
+            return render_template('addRide.html', user={'nric':'123456', 'Name':'jackie'});
+        except ValueError:
+            return redirect('/')
 
+			
+@app.route("/addRide", methods=['POST'])
+def addRide():
+	origin = request.form['origin']
+	destination = request.form['destination']
+	rideDateTime = request.form['rideDateTime']
+	rideEndTime = request.form['rideEndTime']
+	status = request.form['status']
+	nric = request.args.get('nric')
+	
+	new_ride = { 'Driver': nric, 'RideDateTime':dt.date(2018,9,19), 'RideEndTime':dt.time(14,00),
+				 'Origin': origin, 'Destination' : destination, 'Status' : status}
+	ride.addRide(new_ride)
+	
+	if nric is None:
+		return redirect('/addRide')
+	else:
+		user = ride.retrieveAllRide();
+        return redirect('/')			
 
 if __name__ == '__main__':
     app.run(debug=True)

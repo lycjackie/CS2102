@@ -50,7 +50,7 @@ def addRide(ride_details):
 
 def retrieveAllRide():
 
-    sql = """ SELECT u.\"Name\",r.\"Origin\",r.\"Destination\",r.\"Status\",r.\"RideId\"
+    sql = """ SELECT u.\"Name\",u.\"NRIC\",r.\"Origin\",r.\"Destination\",r.\"Status\",r.\"RideId\"
     FROM \"Rides\" r,\"Users\" u
     WHERE r.\"Driver\" = u.\"NRIC\"
     ORDER BY r.\"RideDateTime\" ASC
