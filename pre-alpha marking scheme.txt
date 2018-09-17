@@ -1,0 +1,2 @@
+1 mark - query and update 
+0.5 mark - query or update only
