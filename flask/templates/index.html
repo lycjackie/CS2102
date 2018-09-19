@@ -11,6 +11,14 @@
         font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma
       }
 
+      button {
+        border-color: transparent;
+        border-style: solid;
+        border-width: 0px;
+        background-color: transparent;
+        padding: 0;
+      }
+
       .routing-form {
         background-color: #d1d1d1;
         padding: 20px;
@@ -122,7 +130,7 @@
     </style>
   </head>
   <body>
-    <div class="routing-form">
+    <form class="routing-form">
       <div class="routing-field">
         <div class="mui-container-fluid">
           <div class="mui-row">
@@ -131,7 +139,7 @@
             </div>
             <div class="mui-col-md-11">
               <div class="clear-margin mui-textfield">
-                <input type="text" placeholder="Pick Up Address">
+                <input id="origin" name="origin" type="text" placeholder="Pick Up Address" value="{{origin}}">
               </div>
             </div>
           </div>
@@ -145,52 +153,78 @@
             </div>
             <div class="mui-col-md-11">
               <div class="clear-margin mui-textfield">
-                <input type="text" placeholder="Destination Address">
+                <input id="destination" name="destination" type="text" placeholder="Destination Address" value="{{destination}}">
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <button id="submit" style="display:none" type="submit"></button>
+    </form>
     <div class="content">
       <div class="routing-heading">
         <div class="mui--text-subhead">Available Routes</div>
       </div>
       {% for ride in rides %}
-      <div class="route-option">
-        <div class="padding-with-circle mui--text-title">{{ride.Name}}</div>
-        <br/>
-        <div class="mui-container-fluid">
-          <div class="mui-row">
-            <div class="auto-width center-content mui-col-md-1" style="height:24px">
-              <div class="circle green"></div>
-            </div>
-            <div class="auto-width mui-col-md-11">
-              <span class="time-info mui--text-body2">07:05</span>
-              <span class="location-info mui--text-body1">{{ride.Origin}}</span>
-            </div>
-          </div>
+        <div class="route-option">
+          <div class="padding-with-circle mui--text-title">{{ride.Name}}</div>
           <br/>
-          <div class="mui-row">
-            <div class="auto-width center-content mui-col-md-1" style="height:24px">
-              <div class="circle red"></div>
+          <div class="mui-container-fluid">
+            <div class="mui-row">
+              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                <div class="circle green"></div>
+              </div>
+              <div class="auto-width mui-col-md-11">
+                <span class="time-info mui--text-body2">07:05</span>
+                <span class="location-info mui--text-body1">{{ride.Origin}}</span>
+              </div>
             </div>
-            <div class="auto-width mui-col-md-11">
-              <span class="time-info mui--text-body2">07:49</span>
-              <span class="location-info mui--text-body1">{{ride.Destination}}</span>
+            <br/>
+            <div class="mui-row">
+              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                <div class="circle red"></div>
+              </div>
+              <div class="auto-width mui-col-md-11">
+                <span class="time-info mui--text-body2">07:49</span>
+                <span class="location-info mui--text-body1">{{ride.Destination}}</span>
+              </div>
             </div>
+            <button class="edit-btn" onclick="location.href = '/updateRide?rideid={{ ride.RideId }}'">
+              <i class="icon material-icons">edit</i>
+            </button>
           </div>
-          <button class="edit-btn" onclick="location.href = '/updateRide?rideid={{ ride.RideId }}'">
-            <i class="icon material-icons">edit</i>
+
+          <button class="create-btn" onclick="location.href = '/addRide?nric={{ ride.NRIC }}'">
+            <i class="icon material-icons">add_circle</i>
           </button>
         </div>
-      </div>
-     
-      <button class="create-btn" onclick="location.href = '/addRide?nric={{ user.NRIC }}'">
-        <i class="icon material-icons">add_circle</i>
-      </button>
-	  
 	   {% endfor %}
     </div>
+    <script>
+      $(document).ready(function(){
+        originIn = document.getElementById("origin")
+        destIn = document.getElementById("destination")
+
+        originIn.addEventListener("keyup", function(event){
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Number 13 is the "Enter" key on the keyboard
+          if (event.keyCode === 13) {
+            // Trigger the button element with a click
+            document.getElementById("submit").click();
+          }
+        })
+
+        destIn.addEventListener("keyup", function(event){
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Number 13 is the "Enter" key on the keyboard
+          if (event.keyCode === 13) {
+            // Trigger the button element with a click
+            document.getElementById("submit").click();
+          }
+        })
+      })
+    </script>
   </body>
 </html>

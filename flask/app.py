@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, session
 
 import psycopg2
 import datetime as dt
@@ -8,6 +8,7 @@ import random
 import urlparse
 
 app = Flask(__name__, template_folder='templates')
+app.secret_key = "super secret key"
 ride = importlib.import_module("data.rides")
 user = importlib.import_module("data.users")
 
@@ -21,8 +22,16 @@ def main():
         'role': 3
     }
     '''
-    list = ride.retrieveAllRide();
-    return render_template('index.html', rides = list);
+    origin = ""
+    destination = ""
+    if request.args.get('origin') is not None:
+		origin = request.args.get('origin')
+    if request.args.get('destination') is not None:
+		destination = request.args.get('destination')
+    list = ride.searchRides(origin, destination)
+    print list
+
+    return render_template('index.html', rides = list, origin = origin, destination = destination);
 
 @app.route('/updateRide')
 def renderUpdateRide():
@@ -49,7 +58,7 @@ def updateRide():
     else:
         user = ride.retrieveRide(rideId)
         return redirect('/')
-		
+
 
 @app.route('/addRide')
 def renderAddRide():
@@ -64,7 +73,7 @@ def renderAddRide():
         except ValueError:
             return redirect('/')
 
-			
+
 @app.route("/addRide", methods=['POST'])
 def addRide():
 	origin = request.form['origin']
@@ -73,25 +82,23 @@ def addRide():
 	rideEndTime = request.form['rideEndTime']
 	status = request.form['status']
 	nric = request.args.get('nric')
-	
+
 	new_ride = { 'Driver': nric, 'RideDateTime':dt.date(2018,9,19), 'RideEndTime':dt.time(14,00),
 				 'Origin': origin, 'Destination' : destination, 'Status' : status}
 	ride.addRide(new_ride)
-	
+
 	if nric is None:
 		return redirect('/addRide')
 	else:
 		user = ride.retrieveAllRide();
-        return redirect('/')			
+        return redirect('/')
 
-@app.route("/searchRides", method=['POST'])
+@app.route("/searchRides", methods=['POST'])
 def searchRides():
-	origin = request.form['origin']
-	destination = request.form['destination']
-	
-	rides = ride.searchRides(origin, destination)
-	
-	return redirect('/searchRides',rides=rides)
-		
+    origin = request.form['origin']
+    destination = request.form['destination']
+
+    return redirect('/')
+
 if __name__ == '__main__':
     app.run(debug=True)

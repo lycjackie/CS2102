@@ -1,6 +1,6 @@
 from dbconfig import connect
 import datetime as dt
-import psycopg2, psycopg2.extras
+import psycopg2, psycopg2.extras, psycopg2.sql
 
 '''
 create table if not exists "Rides"
@@ -109,6 +109,27 @@ def updateRide(rideId, newOrigin, newDestination):
         if db is not None:
             db.close()
     return
+
+def searchRides(origin, destination):
+
+    sql = """ SELECT u.\"Name\",u.\"NRIC\",r.\"Origin\",r.\"Destination\",r.\"Status\",r.\"RideId\"
+    FROM \"Rides\" r,\"Users\" u
+    WHERE r.\"Driver\" = u.\"NRIC\" AND LOWER(r.\"Origin\") LIKE LOWER(%s) AND LOWER(r.\"Destination\") LIKE LOWER(%s)
+    ORDER BY r.\"RideDateTime\" ASC
+     """
+    db = connect()
+    res = None
+    try:
+        cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+        cur.execute(sql,('%' + origin + '%', '%' + destination + '%'),)
+        res = cur.fetchall()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print error
+    finally:
+        if db is not None:
+            db.close()
+    return res
 
 if __name__ == '__main__':
     test_user = {
