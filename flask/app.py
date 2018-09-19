@@ -84,5 +84,14 @@ def addRide():
 		user = ride.retrieveAllRide();
         return redirect('/')			
 
+@app.route("/searchRides", method=['POST'])
+def searchRides():
+	origin = request.form['origin']
+	destination = request.form['destination']
+	
+	rides = ride.searchRides(origin, destination)
+	
+	return redirect('/searchRides',rides=rides)
+		
 if __name__ == '__main__':
     app.run(debug=True)
