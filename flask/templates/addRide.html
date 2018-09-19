@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="//cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+      body {
+        font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma
+      }
+
+      .routing-form {
+        background-color: #d1d1d1;
+        padding: 20px;
+        position: fixed;
+        width: calc(100vw - 40px);
+      }
+
+      .content {
+        padding-top: 145px;
+      }
+
+      .routing-field {
+        background-color: #f9f9f9;
+        padding: 10px;
+      }
+
+      .routing-field:first-child {
+        border-radius: 5px 5px 0px 0px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+      }
+
+      .routing-field:last-child {
+        border-radius: 0px 0px 5px 5px;
+      }
+
+      .routing-heading {
+        background-color: #f1f1f1;
+        padding: 20px;
+      }
+
+      .route-option {
+        padding: 30px 15px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+      }
+
+      .time-info {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .location-info {
+        font-size: 20px;
+        padding-left: 20px;
+        font-weight: lighter;
+      }
+
+      .clear-margin {
+        margin: 0px;
+      }
+
+      .center-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .auto-width {
+        width: auto;
+      }
+
+      .circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 100px;
+      }
+
+      .padding-with-circle {
+        padding-left: 15px;
+      }
+
+      .circle.green {
+        background-color: #36d7b7;
+      }
+
+      .circle.red {
+        background-color: #f03434;
+      }
+
+      .mui-textfield>input, .mui-textfield>textarea {
+        border-bottom-width: 0px;
+      }
+
+      .mui-textfield {
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+      <form method="post">
+        <div class="route-option">
+          <div class="padding-with-circle mui--text-title">Driver Name: {{user.Name}}</div>
+          <br/>
+          <div class="mui-container-fluid">
+			
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="time-info mui--text-body2">Pick Up Point</span>
+                <div class="mui-textfield">
+                  <input type="text" name="origin" value="" placeholder="Enter Pick Up Point">
+                </div>
+              </div>
+            </div>
+            <br/>
+			
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="time-info mui--text-body2">Destination Point</span>
+                <div class="mui-textfield">
+                  <input type="text" name="destination" value="" placeholder="Enter Destination">
+                </div>
+              </div>
+            </div>
+            <br/>
+			
+            <div class="mui-row">
+              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                <div class="circle green"></div>
+              </div>
+              <div class="auto-width mui-col-md-11">
+                <span class="time-info mui--text-body2">Pick Up Time</span>
+                <div class="mui-textfield">
+                  <input type="date" name="rideDateTime" value="">
+                </div>
+              </div>
+            </div>
+            <br/>
+			
+            <div class="mui-row">
+              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                <div class="circle red"></div>
+              </div>
+              <div class="auto-width mui-col-md-11">
+                <span class="time-info mui--text-body2">End Time</span>
+                <div class="mui-textfield">
+                  <input type="time" name="rideEndTime" value="">
+                </div>
+              </div>
+            </div>
+			<br/>
+			
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="time-info mui--text-body2">Status</span>
+                <div class="mui-textfield">
+                  <select name="status" value="">
+						<option value="Pending">Pending</option>
+						<option value="In Progress">In Progress</option>
+						<option value="Completed">Completed</option>
+						<option value="NeverGonnaGiveYouUp">Never gonna give you up</option>
+				  </select>
+                </div>
+              </div>
+            </div>
+			
+          </div>
+          <button type="submit" class="mui-btn mui-btn--raised">Add</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      $(document).ready(function(){
+
+    });
+    </script>
+  </body>
+</html>
