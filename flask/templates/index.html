@@ -156,9 +156,9 @@
       <div class="routing-heading">
         <div class="mui--text-subhead">Available Routes</div>
       </div>
-      {% for user in users %}
+      {% for ride in rides %}
       <div class="route-option">
-        <div class="padding-with-circle mui--text-title">{{user.Name}}</div>
+        <div class="padding-with-circle mui--text-title">{{ride.Name}}</div>
         <br/>
         <div class="mui-container-fluid">
           <div class="mui-row">
@@ -167,7 +167,7 @@
             </div>
             <div class="auto-width mui-col-md-11">
               <span class="time-info mui--text-body2">07:05</span>
-              <span class="location-info mui--text-body1">{{user.Origin}}</span>
+              <span class="location-info mui--text-body1">{{ride.Origin}}</span>
             </div>
           </div>
           <br/>
@@ -177,10 +177,10 @@
             </div>
             <div class="auto-width mui-col-md-11">
               <span class="time-info mui--text-body2">07:49</span>
-              <span class="location-info mui--text-body1">{{user.Destination}}</span>
+              <span class="location-info mui--text-body1">{{ride.Destination}}</span>
             </div>
           </div>
-          <button class="edit-btn" onclick="location.href = '/updateRide?rideid={{ user.RideId }}'">
+          <button class="edit-btn" onclick="location.href = '/updateRide?rideid={{ ride.RideId }}'">
             <i class="icon material-icons">edit</i>
           </button>
         </div>

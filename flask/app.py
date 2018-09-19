@@ -35,7 +35,7 @@ def main():
     '''
     #ride.addRide(test_driver);
     list = ride.retrieveAllRide();
-    return render_template('index.html', users = list);
+    return render_template('index.html', rides = list);
 
 @app.route('/updateRide')
 def renderUpdateRide():
