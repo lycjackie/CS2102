@@ -42,18 +42,17 @@ for each_pair in itertools.permutations(user,2):
 #print len(friend_list)
 
 insert_person = """
-INSERT INTO PERSON VALUES ('{}', '{}');
-"""
+INSERT INTO PERSON VALUES ('{}', '{}');"""
 
 insert_friend = """
 INSERT INTO FRIEND VALUES ('{}', '{}');
 """
 
 for u in user:
-	print insert_person.format(u,u)
+	print insert_person.format(u,u).rstrip()
 
 for friend in friend_list:
-	print insert_friend.format(friend.id1,friend.id2)
+	print insert_friend.format(friend.id1,friend.id2).rstrip()
 
 
 
