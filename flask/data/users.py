@@ -2,28 +2,30 @@ import psycopg2
 from dbconfig import connect
 
 '''
-	CREATE TABLE "Users" (
-	"Name" varchar(64) NOT NULL,
-	"NRIC" varchar(64) NOT NULL,
-	"Contact" numeric NOT NULL,
-	CONSTRAINT Users_pk PRIMARY KEY ("NRIC")
-)
+create table "user"
+(
+	email varchar(256) not null constraint user_pk primary key,
+	contact numeric(8),
+	first_name varchar(50) not null,
+	last_name varchar(50) not null,
+	is_admin boolean default false not null
+);
 '''
 def addUser(user):
-    sql = "INSERT INTO \"Users\" VALUES (%s,%s,%s) RETURNING \"NRIC\";"
+    sql = "INSERT INTO \"user\" VALUES (%s,%s,%s,%s,false) RETURNING \"email\";"
     s = None
     db = connect()
     try:
         cur = db.cursor()
 
-        cur.execute(sql, (user['name'],user['nric'],user['contact']))
+        cur.execute(sql, (user['email'],user['contact'],user['firstName'],user['lastName']))
 
         s = cur.fetchone()[0]
         ## Insert the role
         if s:
-            print "Successfully inserted"
-            role_sql = "INSERT INTO \"UserRole\" VALUES (%s,%s) RETURNING \"User_NRIC\";"
-            cur.execute(role_sql, (user['nric'],user['role']))
+			print "Successfully inserted"
+        #     role_sql = "INSERT INTO \"UserRole\" VALUES (%s,%s) RETURNING \"User_NRIC\";"
+        #     cur.execute(role_sql, (user['nric'],user['role']))
 
         # finish
         db.commit()
@@ -39,12 +41,12 @@ def addUser(user):
 
 
 def retrieveUser(user):
-    sql = "SELECT * FROM \"Users\" Where \"NRIC\" = %s;"
+    sql = "SELECT * FROM \"user\" Where \"email\" = %s;"
     res = []
     db = connect()
     try:
         cur = db.cursor()
-        no_rows = cur.execute(sql,(user['nric'],)) # need 1 comma behind if only using 1 parameter.
+        no_rows = cur.execute(sql,(user['email'],)) # need 1 comma behind if only using 1 parameter.
 
         while True: # loop cursor and retrieve results
 			row = cur.fetchone() # should only return 1 result
