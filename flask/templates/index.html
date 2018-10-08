@@ -62,15 +62,34 @@
         right: 15px;
       }
 
-      .create-btn {
+      #toolbar {
         position: fixed;
         bottom: 30px;
         right: 30px;
+        display: flex;
+        flex-direction: column;
       }
 
       .create-btn > .icon {
         font-size: 4em;
         color: #19b5fe;
+      }
+
+      #toolbar {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .create-btn > .icon {
+        font-size: 4em;
+        color: #19b5fe;
+      }
+
+      .exit-btn > .icon {
+        font-size: 4em;
       }
 
       .time-info {
@@ -193,12 +212,18 @@
               <i class="icon material-icons">edit</i>
             </button>
           </div>
-
-          <button class="create-btn" onclick="location.href = '/addRide?nric={{ ride.NRIC }}'">
-            <i class="icon material-icons">add_circle</i>
-          </button>
         </div>
 	   {% endfor %}
+    </div>
+    <div id="toolbar">
+      <button class="create-btn" onclick="location.href = '/addRide?email={{ email }}'">
+        <i class="icon material-icons">add_circle</i>
+      </button>
+      <br />
+      <br />
+      <button class="exit-btn" onclick="location.href = '/logout'">
+        <i class="icon material-icons">exit_to_app</i>
+      </button>
     </div>
     <script>
       $(document).ready(function(){

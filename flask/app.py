@@ -22,6 +22,11 @@ def main():
         'role': 3
     }
     '''
+
+    'Check if logged in'
+    if session.get('logged_in') is None:
+        return redirect('/login')
+
     origin = ""
     destination = ""
     if request.args.get('origin') is not None:
@@ -31,7 +36,49 @@ def main():
     list = ride.searchRides(origin, destination)
     print list
 
-    return render_template('index.html', rides = list, origin = origin, destination = destination);
+    return render_template('index.html', email = session.get('logged_in')['email'], rides = list, origin = origin, destination = destination);
+
+@app.route('/login')
+def renderLogin():
+    return render_template('login.html');
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form['email']
+    u = user.retrieveUser({'email': email})
+    if u.length > 0:
+        session['logged_in'] = {
+            'email': u[0]
+        }
+        return redirect('/')
+    else:
+        return redirect('/login?invalid=true')
+
+@app.route('/signup')
+def renderSignup():
+    return render_template('signup.html');
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    email = request.form['email']
+    firstName = request.form['firstname']
+    lastName = request.form['lastname']
+    contact = request.form['contact']
+    u = user.addUser({
+        'email': email,
+        'firstName': firstName,
+        'lastName': lastName,
+        'contact': contact
+    })
+    if u:
+        return redirect('/login')
+    else:
+        return redirect('/signup?invalid=true')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect('/login')
 
 @app.route('/updateRide')
 def renderUpdateRide():
@@ -62,7 +109,7 @@ def updateRide():
 
 @app.route('/addRide')
 def renderAddRide():
-    nric = request.args.get('nric')
+    nric = request.args.get('email')
     if nric is None:
         return redirect('/')
     else:

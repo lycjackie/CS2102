@@ -32,5 +32,5 @@ psql -h cs2107.jackielyc.me -U cs2102_admin --dbname=cs2102_project
 > UI documentation available at https://www.muicss.com/
 
 ```
-flask run
+python app.py
 ```

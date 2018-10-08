@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="//cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
+    <style>
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+      body {
+        font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma;
+        background-image: url("{{ url_for('static', filename='login-bg.jpg') }}");
+        background-position: center;
+      }
+      .fill-parent {
+        height: 100%;
+        width: 100%;
+      }
+      .center-content {
+        display: flex;
+        justify-content: center;
+      }
+      #overlay {
+        background-color: rgba(0, 0, 0, 0.4);
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      #container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      #content {
+        animation: 1s ease-in 0s 1 fadeIn;
+        padding: 15px 40px;
+        background-color: #f1f1f1;
+        border-radius: 15px;
+        box-shadow: 0 0 100px #013243;
+      }
+      #heading {
+        text-align: center;
+        font-size: 25px;
+      }
+      form {
+        padding-top: 15px;
+      }
+      form a {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="overlay" class="fill-parent">
+    </div>
+    <div id="container" class="fill-parent">
+      <div id="content">
+        <div id="heading">CarPool</div>
+        <form method="post" class="mui-form">
+          <div class="mui-textfield mui-textfield--float-label">
+            <input name="email" type="email" required>
+            <label>Email (required)</label>
+          </div>
+          <div class="mui-textfield mui-textfield--float-label">
+            <input name="firstname" type="text" required>
+            <label>First Name (required)</label>
+          </div>
+          <div class="mui-textfield mui-textfield--float-label">
+            <input name="lastname" type="text" required>
+            <label>Last Name (required)</label>
+          </div>
+          <div class="mui-textfield mui-textfield--float-label">
+            <input name="contact" type="text" required>
+            <label>Contact (required)</label>
+          </div>
+          <button type="submit" class="mui-btn mui-btn--primary fill-parent">signup</button>
+          <div class="fill-parent">
+            <a href="/login">Already a member? Login now</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+    </script>
+  </body>
+</html>
