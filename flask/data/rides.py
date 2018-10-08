@@ -113,7 +113,7 @@ def updateRide(rideId, newOrigin, newDestination):
 def searchRides(origin, destination):
 
     sql = """ SELECT u.\"Name\",u.\"NRIC\",r.\"Origin\",r.\"Destination\",r.\"Status\",r.\"RideId\"
-    FROM \"Rides\" r,\"Users\" u
+    FROM \"ride\" r,\"user\" u
     WHERE r.\"Driver\" = u.\"NRIC\" AND LOWER(r.\"Origin\") LIKE LOWER(%s) AND LOWER(r.\"Destination\") LIKE LOWER(%s)
     ORDER BY r.\"RideDateTime\" ASC
      """

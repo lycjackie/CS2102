@@ -46,7 +46,8 @@ def renderLogin():
 def login():
     email = request.form['email']
     u = user.retrieveUser({'email': email})
-    if u.length > 0:
+    print u
+    if len(u)> 0:
         session['logged_in'] = {
             'email': u[0]
         }
