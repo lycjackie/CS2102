@@ -114,11 +114,13 @@ def updateRide(rideId, newOrigin, newDestination):
     return
 
 def searchRides(origin, destination):
-
-    sql = """ SELECT u.\"Name\",u.\"NRIC\",r.\"Origin\",r.\"Destination\",r.\"Status\",r.\"RideId\"
-    FROM \"ride\" r,\"user\" u
-    WHERE r.\"Driver\" = u.\"NRIC\" AND LOWER(r.\"Origin\") LIKE LOWER(%s) AND LOWER(r.\"Destination\") LIKE LOWER(%s)
-    ORDER BY r.\"RideDateTime\" ASC
+    sql = """
+    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no
+    FROM ride r, "user" u, car c
+    WHERE r.reg_no = c.reg_no
+    and c.email = u.email
+    and LOWER(r.origin) LIKE LOWER(%s) and LOWER(r.destination) like (%s)
+    ORDER BY r.start_time ASC
      """
     db = connect()
     res = None
@@ -150,7 +152,8 @@ if __name__ == '__main__':
     }
     #addUser(test_user)
     #print addRide(test_user)
-    res = retrieveAllRide()
+    #res = retrieveAllRide()
+    res = searchRides('','')
     #print retrieveRide(test_user)
     for ride in res:
         print "Driver {} is {} to go from {} to {}".format(ride.reg_no,ride.status,ride.origin,ride.destination) # use NamedTuple

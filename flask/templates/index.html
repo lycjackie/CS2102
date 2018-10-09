@@ -186,7 +186,7 @@
       </div>
       {% for ride in rides %}
         <div class="route-option">
-          <div class="padding-with-circle mui--text-title">{{ride.Name}}</div>
+          <div class="padding-with-circle mui--text-title">{{ride.first_name}}</div>
           <br/>
           <div class="mui-container-fluid">
             <div class="mui-row">
@@ -195,7 +195,7 @@
               </div>
               <div class="auto-width mui-col-md-11">
                 <span class="time-info mui--text-body2">07:05</span>
-                <span class="location-info mui--text-body1">{{ride.Origin}}</span>
+                <span class="location-info mui--text-body1">{{ride.origin}}</span>
               </div>
             </div>
             <br/>
@@ -205,10 +205,10 @@
               </div>
               <div class="auto-width mui-col-md-11">
                 <span class="time-info mui--text-body2">07:49</span>
-                <span class="location-info mui--text-body1">{{ride.Destination}}</span>
+                <span class="location-info mui--text-body1">{{ride.destination}}</span>
               </div>
             </div>
-            <button class="edit-btn" onclick="location.href = '/updateRide?rideid={{ ride.RideId }}'">
+            <button class="edit-btn" onclick="location.href = '/updateRide?rideid={{ ride.reg_no }}'">
               <i class="icon material-icons">edit</i>
             </button>
           </div>
