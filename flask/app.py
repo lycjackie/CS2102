@@ -13,6 +13,7 @@ ride = importlib.import_module("data.rides")
 user = importlib.import_module("data.users")
 car = importlib.import_module("data.cars")
 model = importlib.import_module("data.models")
+ride_bid = importlib.import_module("data.bid")
 
 @app.route('/')
 def main():
@@ -212,6 +213,57 @@ def updateCar():
         make_model = request.form['make_model'].split('/')
         res = car.updateCarByRegNo(reg_no, make_model[0], make_model[1], colour)
         return redirect('/listCar')
+
+@app.route("/addBid")
+def renderAddBid():
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        rides = ride_bid.get_bid('')
+        return render_template('addBid.html',rides=rides)
+
+'''
+	test_user = {
+	    'reg_no':'SGX1337X',
+	    'start_time': dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)),
+	    'no_pax': 1,
+	    'bid_price': 13.37,
+		'email':'owerv@tamu.edu'
+	}
+'''
+@app.route("/addBid",methods=['POST'])
+def addBid():
+    if session.get('email') is None or session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        price = request.form['price']
+        ride_detail = request.form['ride_detail'].split('/')
+        no_pax = request.form['no_pax']
+        start_time =  dt.datetime.strptime(ride_detail[1],'%Y-%m-%d %H:%M:%S')
+        print start_time
+        reg_no = ride_detail[0]
+        ride_details = {
+            'reg_no' : reg_no,
+            'start_time': start_time,
+            'no_pax' : no_pax,
+            'bid_price' : price,
+            'email' : session.get('email')
+        }
+        print ride_details
+        res = ride_bid.add_bid(ride_details)
+        if res not in 'pending':
+            return redirect('/addBid')
+        else:
+            return redirect('/')
+
+@app.route('/listBid')
+def renderListBid():
+    if session.get('logged_in') is None or session.get('email') is None:
+        return redirect('/login')
+    else:
+        rides = rides = ride_bid.get_bid(session.get('email'))
+        print rides
+        return render_template('listBid.html',rides=rides)
 
 
 if __name__ == '__main__':

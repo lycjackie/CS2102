@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="//cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
+    <style>
+      body {
+        font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma
+      }
+
+      button {
+        border-color: transparent;
+        border-style: solid;
+        border-width: 0px;
+        background-color: transparent;
+        padding: 0;
+      }
+
+      .content {
+        {#padding-top: 145px;#}
+      }
+
+      .heading {
+        background-color: #f1f1f1;
+        padding: 20px;
+      }
+
+      .route-option {
+        position: relative;
+        padding: 30px 15px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+      }
+
+      .edit-btn {
+        position: absolute;
+        top: 30px;
+        right: 15px;
+      }
+
+      #toolbar {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .create-btn > .icon {
+        font-size: 4em;
+        color: #19b5fe;
+      }
+
+      #toolbar {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .create-btn > .icon {
+        font-size: 4em;
+        color: #19b5fe;
+      }
+
+      .exit-btn > .icon {
+        font-size: 4em;
+      }
+
+      .numberplate-info {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .car-info {
+        font-size: 20px;
+        padding-left: 20px;
+        font-weight: lighter;
+      }
+
+      .center-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .auto-width {
+        width: auto;
+      }
+
+      .circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 100px;
+      }
+
+      .padding-with-circle {
+        padding-left: 15px;
+      }
+
+      .circle.green {
+        background-color: #36d7b7;
+      }
+
+      .circle.red {
+        background-color: #f03434;
+      }
+
+      .icon {
+        color: #a1a1a1;
+      }
+
+      .mui-textfield>input, .mui-textfield>textarea {
+        border-bottom-width: 0px;
+      }
+
+      .mui-textfield {
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <div class="heading">
+        <div class="mui--text-subhead">Pending Bids for Your Ride</div>
+      </div>
+      {% for ride in rides %}
+        <div class="route-option">
+          <div class="padding-with-circle mui--text-title"></div>
+          <br/>
+          <div class="mui-container-fluid">
+            <div class="mui-row">
+              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                <div class="circle green"></div>
+              </div>
+              <div class="auto-width mui-col-md-11">
+                <span class="numberplate-info mui--text-body2">From : {{ ride.origin}}</span>
+                <br/>
+                <span class="numberplate-info mui--text-body2">To : {{ ride.destination }}</span>
+                <br/>
+                <span class="numberplate-info mui--text-body2">At {{ ride.start_time }}</span>
+                <br/>
+                <span class="numberplate-info mui--text-body2">Total Pax {{ride.no_pax}}</span>
+                <br/>
+                <span class="numberplate-info mui--text-body2">Total Bid Price {{ride.bid_price}}</span>
+                <br/>
+              </div>
+            </div>
+            <br/>
+            Approve Button here
+          </div>
+        </div>
+	   {% endfor %}
+    </div>
+    <script>
+      $(document).ready(function(){
+
+      })
+    </script>
+  </body>
+</html>
