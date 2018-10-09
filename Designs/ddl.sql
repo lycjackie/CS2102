@@ -28,7 +28,7 @@ create table car
 create table ride
 (
 	start_time timestamp not null,
-	status varchar(10) not null constraint ride_status_type check (((status) = 'in progress') OR ((status) = 'completed')),
+	status varchar(11) not null constraint ride_status_type check (((status) = 'in progress') OR ((status) = 'completed')),
 	current_pax integer not null,
 	destination varchar(256) not null,
 	origin varchar(256) not null,
