@@ -70,11 +70,6 @@
         flex-direction: column;
       }
 
-      .create-btn > .icon {
-        font-size: 4em;
-        color: #19b5fe;
-      }
-
       #toolbar {
         position: fixed;
         bottom: 30px;
@@ -86,6 +81,11 @@
       .create-btn > .icon {
         font-size: 4em;
         color: #19b5fe;
+      }
+
+      .car-btn > .icon {
+        font-size: 4em;
+        color: #fe000a;
       }
 
       .exit-btn > .icon {
@@ -218,6 +218,11 @@
     <div id="toolbar">
       <button class="create-btn" onclick="location.href = '/addRide?email={{ email }}'">
         <i class="icon material-icons">add_circle</i>
+      </button>
+      <br />
+      <br />
+      <button class="car-btn" onclick="location.href = '/listCar'">
+        <i class="icon material-icons">directions_car</i>
       </button>
       <br />
       <br />
