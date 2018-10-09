@@ -60,6 +60,26 @@ def get_bid(reg_no):
 	        db.close()
 	return res
 
+def get_available_bidding():
+	sql= """
+	SELECT r.reg_no,r.start_time
+	FROM ride r
+	where r.status = 'in progress'
+	"""
+	db = connect()
+	res = None
+	try:
+		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+		cur.execute(sql)
+		res = cur.fetchall()
+		cur.close()
+	except (Exception, psycopg2.DatabaseError) as error:
+	    print error
+	finally:
+	    if db is not None:
+	        db.close()
+	return res
+
 def bid_approval(email,reg_no,start_time,status):
 	sql = """
 	UPDATE ride_bid set status = %s

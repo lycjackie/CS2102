@@ -219,7 +219,7 @@ def renderAddBid():
     if session.get('logged_in') is None:
         return redirect('/login')
     else:
-        rides = ride_bid.get_bid('')
+        rides = ride_bid.get_available_bidding()
         return render_template('addBid.html',rides=rides)
 
 '''
