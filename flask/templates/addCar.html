@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="//cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+      body {
+        font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma
+      }
+
+      .content {
+        padding-top: 145px;
+      }
+
+      .heading {
+        background-color: #f1f1f1;
+        padding: 20px;
+      }
+
+      .route-option {
+        padding: 30px 15px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+      }
+
+      .numberplate-info {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .model-info {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .colour-info {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .auto-width {
+        width: auto;
+      }
+
+      .mui-textfield>input, .mui-textfield>textarea {
+        border-bottom-width: 0px;
+      }
+
+      .mui-textfield {
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+      <div class="heading">
+        <div class="mui--text-subhead">Add Car</div>
+      </div>
+      <form method="post">
+        <div class="route-option">
+          <div class="mui-container-fluid">
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="numberplate-info mui--text-body2">Number Plate</span>
+                <div class="mui-textfield">
+                  <input type="text" name="reg_no" value="" placeholder="E.g. SGB1234X">
+                </div>
+              </div>
+            </div>
+            <br/>
+
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="model-info mui--text-body2">Model</span>
+                <div class="mui-textfield">
+                  <select name="make_model" value="">
+                    {% for model in models %}
+                    <option value="{{ model.make }}/{{ model.model }}">{{ model.make }} | {{ model.model }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="colour-info mui--text-body2">Colour</span>
+                <div class="mui-textfield">
+                  <input type="text" name="colour" value="" placeholder="Enter vehicle colour">
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <button type="submit" class="mui-btn mui-btn--raised">Add</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      $(document).ready(function(){
+
+    });
+    </script>
+  </body>
+</html>

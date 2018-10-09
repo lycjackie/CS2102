@@ -11,6 +11,8 @@ app = Flask(__name__, template_folder='templates')
 app.secret_key = "super secret key"
 ride = importlib.import_module("data.rides")
 user = importlib.import_module("data.users")
+car = importlib.import_module("data.cars")
+model = importlib.import_module("data.models")
 
 @app.route('/')
 def main():
@@ -51,6 +53,7 @@ def login():
         session['logged_in'] = {
             'email': u[0]
         }
+        session['email'] = email
         return redirect('/')
     else:
         return redirect('/login?invalid=true')
@@ -147,6 +150,69 @@ def searchRides():
     destination = request.form['destination']
 
     return redirect('/')
+
+@app.route('/listCar')
+def renderListCar():
+    'Check if logged in'
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        cars = car.retrieveCarsByEmail(session.get('email'))
+        return render_template('listCar.html', cars = cars);
+
+@app.route('/addCar')
+def renderAddCar():
+    'Check if logged in'
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        models = model.retrieveAllModels()
+        return render_template('addCar.html', models = models);
+
+@app.route("/addCar", methods=['POST'])
+def addCar():
+    'Check if logged in'
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        reg_no = request.form['reg_no']
+        make_model = request.form['make_model'].split('/')
+        colour = request.form['colour']
+
+        new_car = { 'reg_no': reg_no, 'make':make_model[0], 'model':make_model[1], 'colour': colour, 'email': session.get('email')}
+        car.addCar(new_car)
+        return redirect('/listCar')
+
+@app.route('/updateCar')
+def renderUpdateCar():
+    'Check if logged in'
+    reg_no = request.args.get('reg_no')
+    if reg_no is None or car.carBelongsTo(reg_no, session.get('email')) is None:
+        return redirect('/listCar')
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        update_car = car.retrieveCarByRegNo(reg_no)
+        models = model.retrieveAllModelsForUpdate(reg_no)
+        if update_car is None:
+            return redirect('/listCar')
+        else:
+            return render_template('updateCar.html', car = update_car, models = models);
+
+@app.route("/updateCar", methods=['POST'])
+def updateCar():
+    'Check if logged in'
+    reg_no = request.args.get('reg_no')
+    if reg_no is None or car.carBelongsTo(reg_no, session.get('email')) is None:
+        return redirect('/')
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        colour = request.form['colour']
+        make_model = request.form['make_model'].split('/')
+        res = car.updateCarByRegNo(reg_no, make_model[0], make_model[1], colour)
+        return redirect('/listCar')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

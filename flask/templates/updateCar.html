@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="//cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+      body {
+        font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma
+      }
+      
+      .heading {
+        background-color: #f1f1f1;
+        padding: 20px;
+      }
+
+      .route-option {
+        padding: 30px 15px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+      }
+
+      .numberplate-info {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .model-info {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .colour-info {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .auto-width {
+        width: auto;
+      }
+
+      .padding-with-circle {
+        padding-left: 15px;
+      }
+
+      .mui-textfield>input, .mui-textfield>textarea {
+        border-bottom-width: 0px;
+      }
+
+      .mui-textfield {
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+{#    <div class="routing-form">#}
+{#      <div class="routing-field">#}
+{#        <div class="mui-container-fluid">#}
+{#          <div class="mui-row">#}
+{#            <div class="center-content mui-col-md-1" style="height:32px">#}
+{#              <div class="circle green"></div>#}
+{#            </div>#}
+{#            <div class="mui-col-md-11">#}
+{#              <div class="clear-margin mui-textfield">#}
+{#                <input type="text" placeholder="Pick Up Address">#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#      <div class="routing-field">#}
+{#        <div class="mui-container-fluid">#}
+{#          <div class="mui-row">#}
+{#            <div class="center-content mui-col-md-1" style="height:32px">#}
+{#              <div class="circle red"></div>#}
+{#            </div>#}
+{#            <div class="mui-col-md-11">#}
+{#              <div class="clear-margin mui-textfield">#}
+{#                <input type="text" placeholder="Destination Address">#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="content">#}
+{#      <div class="heading">#}
+{#        <div class="mui--text-subhead">Available Routes</div>#}
+{#      </div>#}
+      <form method="post">
+        <div class="heading">
+          <div class="mui--text-subhead">Update Car</div>
+        </div>
+        <div class="route-option">
+          <div class="padding-with-circle mui--text-title"></div>
+          <br/>
+          <div class="mui-container-fluid">
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="numberplate-info mui--text-body2">Number Plate</span>
+                <div class="mui-textfield">
+                  <input type="text" disabled="disabled" name="reg_no" value="{{ car.reg_no }}">
+                </div>
+              </div>
+            </div>
+            <br/>
+
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="model-info mui--text-body2">Model</span>
+                <div class="mui-textfield">
+                  <select name="make_model" value="">
+                    {% for model in models %}
+                      <option value="{{ model.make }}/{{ model.model }}">{{ model.make }} | {{ model.model }}</option>
+                      {% if loop.index == 1 %}
+                      <option disabled="disabled">----------------------</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="colour-info mui--text-body2">Colour</span>
+                <div class="mui-textfield">
+                  <input type="text" name="colour" value="{{ car.colour }}" placeholder="Enter vehicle colour">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="mui-btn mui-btn--raised">Update</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      $(document).ready(function(){
+
+    });
+    </script>
+  </body>
+</html>
