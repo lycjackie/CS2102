@@ -43,7 +43,7 @@ create table ride_bid
 	reg_no varchar(8) not null,
 	no_pax integer not null constraint min_pax check (no_pax > 0),
 	bid_price double precision,
-	status varchar(13) not null constraint bid_status_type check (((status) = 'pending') OR ((status) = 'successful') OR ((status) = 'unsuccessful')),
+	status varchar(13) not null constraint bid_status_type check (((status) = 'pending') OR ((status) = 'successful') OR ((status) = 'unsuccessful')) default 'pending',
 	constraint ride_bid_pk primary key (email, start_time, reg_no),
 	constraint ride_bid_start_time_fk foreign key (start_time, reg_no) references ride
 );
