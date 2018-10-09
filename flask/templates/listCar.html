@@ -48,11 +48,6 @@
         flex-direction: column;
       }
 
-      .create-btn > .icon {
-        font-size: 4em;
-        color: #19b5fe;
-      }
-
       #toolbar {
         position: fixed;
         bottom: 30px;
@@ -68,6 +63,11 @@
 
       .exit-btn > .icon {
         font-size: 4em;
+      }
+
+      .home-btn > .icon {
+        font-size: 4em;
+        color: #fe000a;
       }
 
       .numberplate-info {
@@ -152,6 +152,11 @@
     <div id="toolbar">
       <button class="create-btn" onclick="location.href = '/addCar'">
         <i class="icon material-icons">add_circle</i>
+      </button>
+      <br />
+      <br />
+      <button class="home-btn" onclick="location.href = '/'">
+        <i class="icon material-icons">home</i>
       </button>
       <br />
       <br />
