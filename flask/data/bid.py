@@ -24,7 +24,6 @@ def add_bid(bid_detail):
         cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
         cur.execute(sql,(bid_detail['email'],bid_detail['start_time'],bid_detail['reg_no'],bid_detail['no_pax'],bid_detail['bid_price']))
         res = cur.fetchone()[0]
-
         db.commit()
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
@@ -59,19 +58,22 @@ def get_bid(email):
 	    if db is not None:
 	        db.close()
 	return res
-
-def get_available_bidding():
-	sql= """
-	SELECT r.reg_no,r.start_time
-	FROM ride r
-	where r.status = 'in progress'
+def getSingleBid(email,reg_no,start_time):
+	sql="""
+	SELECT rb.email as bidder , rb.reg_no, u.first_name as bidder_name , r.destination, r.origin, rb.start_time, rb.status, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
+	FROM ride_bid as rb
+	INNER JOIN \"user\" u on u.email = rb.email
+	INNER JOIN ride r on rb.reg_no = r.reg_no and rb.start_time = r.start_time
+	AND rb.email = %s
+	AND rb.reg_no = %s
+	and rb.start_time = %s
 	"""
 	db = connect()
 	res = None
 	try:
 		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-		cur.execute(sql)
-		res = cur.fetchall()
+		cur.execute(sql,(email,reg_no,start_time))
+		res = cur.fetchone()
 		cur.close()
 	except (Exception, psycopg2.DatabaseError) as error:
 	    print error
@@ -79,20 +81,29 @@ def get_available_bidding():
 	    if db is not None:
 	        db.close()
 	return res
-
-def bid_approval(email,reg_no,start_time,status):
+def approve_bid(email,reg_no,start_time,status,owner_email):
 	sql = """
-	UPDATE ride_bid set status = %s
-	WHERE reg_no = %s AND start_time = %s
-	AND email = %s
-	RETURNING status
+	UPDATE ride_bid rb set status = %s
+	WHERE rb.reg_no = %s AND rb.start_time = %s
+	AND rb.email = %s
+	AND rb.reg_no in (
+		SELECT c.reg_no
+		FROM car c
+		WHERE c.email = %s
+	)
+	RETURNING rb.status
 	"""
 	db = connect()
 	res = None
+	print email
+	print reg_no
+	print start_time
+	print status
+	print owner_email
 	try:
 		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-		cur.execute(sql,(status,reg_no,start_time,email))
-		res = cur.fetchone()[0]
+		cur.execute(sql, (status,reg_no,start_time,email,owner_email,) )
+		res = cur.fetchone()
 		db.commit()
 		cur.close()
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -103,14 +114,23 @@ def bid_approval(email,reg_no,start_time,status):
 			db.close()
 	return res
 
-def get_single_bid(email,reg_no,start_time):
-	sql = """SELECT * from ride_bid where email = %s and reg_no = %s and start_time = %s and status='pending'"""
+def get_AllBidForSingleRide(reg_no,start_time):
+	sql = """
+	SELECT rb.reg_no,c.email as owner, rb.email as bidder,u.first_name as bidder_name, r.origin,r.destination,rb.start_time,rb.status, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
+	FROM ride_bid rb
+	inner join ride r ON rb.reg_no = r.reg_no and rb.start_time = r.start_time
+	INNER JOIN car c on r.reg_no = c.reg_no
+	INNER JOIN \"user\" u on rb.email = u.email
+	where rb.reg_no = %s
+	and rb.start_time = %s 
+	and rb.status = 'pending'
+	"""
 	db = connect()
 	res = None
 	try:
 		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-		cur.execute(sql,(email,reg_no,start_time))
-		res = cur.fetchone()
+		cur.execute(sql,(reg_no,start_time))
+		res = cur.fetchall()
 		cur.close()
 	except (Exception, psycopg2.DatabaseError) as error:
 	    print error
@@ -131,7 +151,8 @@ if __name__ == '__main__':
 		'email':'owerv@tamu.edu'
 	}
 	#print add_bid(test_user)
-	print get_bid('wpicklessi@geocities.com')
+	#print get_bid('wpicklessi@geocities.com')
+	#print get_AllBidForSingleRide('SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)))
 	#print get_single_bid('a@a.com','SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)))
 	
-	#print bid_approval('owerv@tamu.edu','SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)),'successful')
+	print approve_bid('a@a.com','SGX1337X',dt.datetime.strptime('2018-09-19 14:00:00','%Y-%m-%d %H:%M:%S'),'unsuccessful','wpicklessi@geocities.com')

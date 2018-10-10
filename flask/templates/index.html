@@ -61,6 +61,22 @@
         top: 30px;
         right: 15px;
       }
+      .approve-btn {
+        position: absolute;
+        top: 60px;
+        right: 15px; 
+      }
+      .approve-btn > .icon {
+        color: #36d7b7   
+      }
+      .bid-btn {
+        position: absolute;
+        top: 90px;
+        right: 15px; 
+      }
+      .bid-btn > .icon {
+        color:#19b5fe
+      }
 
       #toolbar {
         position: fixed;
@@ -194,11 +210,19 @@
                 <div class="circle green"></div>
               </div>
               <div class="auto-width mui-col-md-11">
-                <span class="location-info mui--text-body1">{{ride.origin}}</span>
+                <span class="location-info mui--text-body1">From : {{ride.origin}}</span>
               </div>
             </div>
             <br/>
-
+            <div class="mui-row">
+                <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                  <div class="circle red"></div>
+                </div>
+                <div class="auto-width mui-col-md-11">
+                  <span class="location-info mui--text-body1">To : {{ride.destination}}</span>
+                </div>
+              </div>
+              <br/>
 			<div class="mui-row">
               <div class="auto-width center-content mui-col-md-1" style="height:24px">
                 <div class="circle green"></div>
@@ -214,23 +238,23 @@
                 <div class="circle green"></div>
               </div>
               <div class="auto-width mui-col-md-11">
-                <span class="location-info mui--text-body1">{{ride.current_pax}}</span>
+                <span class="location-info mui--text-body1">Current Pax : {{ride.current_pax}}</span>
               </div>
             </div>
 			<br/>
 			
-			<div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                <div class="circle red"></div>
-              </div>
-              <div class="auto-width mui-col-md-11">
-                <span class="location-info mui--text-body1">{{ride.destination}}</span>
-              </div>
-            </div>
+
 			
 			
             <button class="edit-btn" onclick="location.href = '/updateRide?regno={{ ride.reg_no }}&starttime={{ ride.start_time }}'">
               <i class="icon material-icons">edit</i>
+            </button>
+            <br/>
+            <button class="approve-btn" onclick="location.href = '/approve?regno={{ ride.reg_no }}&starttime={{ ride.start_time }}'">
+              <i class="icon material-icons">view_list</i>
+            </button>
+            <button class="bid-btn" onclick="location.href = '/bid?regno={{ ride.reg_no }}&starttime={{ ride.start_time }}'">
+              <i class="icon material-icons">how_to_vote</i>
             </button>
           </div>
         </div>

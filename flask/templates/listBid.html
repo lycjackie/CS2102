@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="//cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script src="//cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
+    <script src="http://cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
     <style>
       body {
         font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma
@@ -19,11 +19,33 @@
         padding: 0;
       }
 
-      .content {
-        {#padding-top: 145px;#}
+      .routing-form {
+        background-color: #d1d1d1;
+        padding: 20px;
+        position: fixed;
+        z-index: 100;
+        width: calc(100vw - 40px);
       }
 
-      .heading {
+      .content {
+        padding-top: 145px;
+      }
+
+      .routing-field {
+        background-color: #f9f9f9;
+        padding: 10px;
+      }
+
+      .routing-field:first-child {
+        border-radius: 5px 5px 0px 0px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+      }
+
+      .routing-field:last-child {
+        border-radius: 0px 0px 5px 5px;
+      }
+
+      .routing-heading {
         background-color: #f1f1f1;
         padding: 20px;
       }
@@ -39,6 +61,22 @@
         top: 30px;
         right: 15px;
       }
+      .approve-btn {
+        position: absolute;
+        top: 60px;
+        right: 15px; 
+      }
+      .approve-btn > .icon {
+        color: #36d7b7   
+      }
+
+      #toolbar {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        flex-direction: column;
+      }
 
       #toolbar {
         position: fixed;
@@ -53,32 +91,28 @@
         color: #19b5fe;
       }
 
-      #toolbar {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .create-btn > .icon {
+      .car-btn > .icon {
         font-size: 4em;
-        color: #19b5fe;
+        color: #fe000a;
       }
 
       .exit-btn > .icon {
         font-size: 4em;
       }
 
-      .numberplate-info {
-        font-size: 24px;
+      .time-info {
+        font-size: 20px;
         font-weight: bold;
       }
 
-      .car-info {
+      .location-info {
         font-size: 20px;
         padding-left: 20px;
         font-weight: lighter;
+      }
+
+      .clear-margin {
+        margin: 0px;
       }
 
       .center-content {
@@ -123,41 +157,118 @@
     </style>
   </head>
   <body>
-    <div class="content">
-      <div class="heading">
-        <div class="mui--text-subhead">Pending Bids for Your Ride</div>
-      </div>
-      {% for ride in rides %}
-        <div class="route-option">
-          <div class="padding-with-circle mui--text-title"></div>
-          <br/>
-          <div class="mui-container-fluid">
-            <div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                <div class="circle green"></div>
-              </div>
-              <div class="auto-width mui-col-md-11">
-                <span class="numberplate-info mui--text-body2">From : {{ ride.origin}}</span>
-                <br/>
-                <span class="numberplate-info mui--text-body2">To : {{ ride.destination }}</span>
-                <br/>
-                <span class="numberplate-info mui--text-body2">At {{ ride.start_time }}</span>
-                <br/>
-                <span class="numberplate-info mui--text-body2">Total Pax {{ride.no_pax}}</span>
-                <br/>
-                <span class="numberplate-info mui--text-body2">Total Bid Price {{ride.bid_price}}</span>
-                <br/>
+    <form class="routing-form">
+      <div class="routing-field">
+        <div class="mui-container-fluid">
+          <div class="mui-row">
+            <div class="center-content mui-col-md-1" style="height:32px">
+              <div class="circle green"></div>
+            </div>
+            <div class="mui-col-md-11">
+              <div class="clear-margin mui-textfield">
+                <input id="origin" name="origin" type="text" placeholder="Pick Up Address" value="{{origin}}">
               </div>
             </div>
-            <br/>
-            Approve Button here
+          </div>
+        </div>
+      </div>
+      <div class="routing-field">
+        <div class="mui-container-fluid">
+          <div class="mui-row">
+            <div class="center-content mui-col-md-1" style="height:32px">
+              <div class="circle red"></div>
+            </div>
+            <div class="mui-col-md-11">
+              <div class="clear-margin mui-textfield">
+                <input id="destination" name="destination" type="text" placeholder="Destination Address" value="{{destination}}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="submit" style="display:none" type="submit"></button>
+    </form>
+    <div class="content">
+      <div class="routing-heading">
+        <div class="mui--text-subhead">All Current Bids</div>
+      </div>
+      {% for bid in bids %}
+        <div class="route-option">
+          <div class="padding-with-circle mui--text-title">Bidder : {{ bid.bidder_name }} </div>
+          <br/>
+          <div class="mui-container-fluid">
+              <div class="mui-row">
+                  <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                      <div class="circle red"></div>
+                  </div>
+                  <div class="auto-width mui-col-md-11">
+                      <span class="time-info mui--text-body2">Total Passenger</span>
+                      <div class="mui-textfield">
+                          <span class=" mui--text-body1"> {{bid.no_pax}}</span>
+                      </div>
+                  </div>
+              </div>
+              <br />
+              <div class="mui-row">
+                      <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                          <div class="circle red"></div>
+                      </div>
+                      <div class="auto-width mui-col-md-11">
+                          <span class="time-info mui--text-body2">Total Bid Price</span>
+                          <div class="mui-textfield">
+                              <span class=" mui--text-body1">${{bid.bid_price}}</span>
+                          </div>
+                      </div>
+                  </div>
+              <br />
+
+            <button class="approve-btn" onclick="location.href = '/approveBid?regno={{ bid.reg_no }}&starttime={{ bid.start_time }}&email={{ bid.bidder }}'">
+              <i class="icon material-icons">beenhere</i>
+            </button>
+            
           </div>
         </div>
 	   {% endfor %}
     </div>
+    <div id="toolbar">
+      <button class="create-btn" onclick="location.href = '/addRide'">
+        <i class="icon material-icons">add_circle</i>
+      </button>
+      <br />
+      <br />
+      <button class="car-btn" onclick="location.href = '/listCar'">
+        <i class="icon material-icons">directions_car</i>
+      </button>
+      <br />
+      <br />
+      <button class="exit-btn" onclick="location.href = '/logout'">
+        <i class="icon material-icons">exit_to_app</i>
+      </button>
+    </div>
     <script>
       $(document).ready(function(){
+        originIn = document.getElementById("origin")
+        destIn = document.getElementById("destination")
 
+        originIn.addEventListener("keyup", function(event){
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Number 13 is the "Enter" key on the keyboard
+          if (event.keyCode === 13) {
+            // Trigger the button element with a click
+            document.getElementById("submit").click();
+          }
+        })
+
+        destIn.addEventListener("keyup", function(event){
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Number 13 is the "Enter" key on the keyboard
+          if (event.keyCode === 13) {
+            // Trigger the button element with a click
+            document.getElementById("submit").click();
+          }
+        })
       })
     </script>
   </body>
