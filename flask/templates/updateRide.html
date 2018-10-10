@@ -99,43 +99,9 @@
     </style>
   </head>
   <body>
-{#    <div class="routing-form">#}
-{#      <div class="routing-field">#}
-{#        <div class="mui-container-fluid">#}
-{#          <div class="mui-row">#}
-{#            <div class="center-content mui-col-md-1" style="height:32px">#}
-{#              <div class="circle green"></div>#}
-{#            </div>#}
-{#            <div class="mui-col-md-11">#}
-{#              <div class="clear-margin mui-textfield">#}
-{#                <input type="text" placeholder="Pick Up Address">#}
-{#              </div>#}
-{#            </div>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-{#      <div class="routing-field">#}
-{#        <div class="mui-container-fluid">#}
-{#          <div class="mui-row">#}
-{#            <div class="center-content mui-col-md-1" style="height:32px">#}
-{#              <div class="circle red"></div>#}
-{#            </div>#}
-{#            <div class="mui-col-md-11">#}
-{#              <div class="clear-margin mui-textfield">#}
-{#                <input type="text" placeholder="Destination Address">#}
-{#              </div>#}
-{#            </div>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#    <div class="content">#}
-{#      <div class="routing-heading">#}
-{#        <div class="mui--text-subhead">Available Routes</div>#}
-{#      </div>#}
       <form method="post">
         <div class="route-option">
-          <div class="padding-with-circle mui--text-title">{{user.Name}}</div>
+          <div class="padding-with-circle mui--text-title">{{rides.first_name}} - {{rides.reg_no}}</div>
           <br/>
           <div class="mui-container-fluid">
             <div class="mui-row">
@@ -143,26 +109,56 @@
                 <div class="circle green"></div>
               </div>
               <div class="auto-width mui-col-md-11">
-                <span class="time-info mui--text-body2">07:05</span>
+                <span class="time-info mui--text-body2">Origin</span>
                 <div class="mui-textfield">
-                  <input type="text" name="newOrigin" value="{{user.Origin}}">
+                  <input type="text" name="origin" value="{{rides.origin}}">
                 </div>
               </div>
             </div>
             <br/>
+			
+			<div class="mui-row">
+              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                <div class="circle red"></div>
+              </div>
+              <div class="auto-width mui-col-md-11">
+                <span class="time-info mui--text-body2">Time</span>
+                <div class="mui-textfield">
+                  <span class="time-info mui--text-body2">{{rides.start_time}}</span>
+                </div>
+              </div>
+            </div>
+			<br/>
+			
+			
             <div class="mui-row">
               <div class="auto-width center-content mui-col-md-1" style="height:24px">
                 <div class="circle red"></div>
               </div>
               <div class="auto-width mui-col-md-11">
-                <span class="time-info mui--text-body2">07:49</span>
+                <span class="time-info mui--text-body2">Destination</span>
                 <div class="mui-textfield">
-                  <input type="text" name="newDestination" value="{{user.Destination}}">
+                  <input type="text" name="destination" value="{{rides.destination}}">
                 </div>
               </div>
             </div>
+			<br/>
+			
+			<div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <span class="time-info mui--text-body2">Status</span>
+                <div class="mui-textfield">
+                  <select name="status" value="{{rides.status}}">
+						<option value="{{rides.status}}">In Progress</option>
+						<option value="completed">Completed</option>
+				  </select>
+                </div>
+              </div>
+            </div>
+			
           </div>
           <button type="submit" class="mui-btn mui-btn--raised">Update</button>
+		  <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
         </div>
       </form>
     </div>

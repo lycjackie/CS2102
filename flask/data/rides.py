@@ -96,17 +96,17 @@ def retrieveRide(ride_detail):
             db.close()
     return res
 
-def updateRide(rideId, newOrigin, newDestination):
+def updateRide(status, newOrigin, newDestination, reg_no, start_time):
 
-    sql = """ UPDATE \"Rides\"
-    SET \"Origin\" = %s, \"Destination\" = %s
-    WHERE \"RideId\" = %s
+    sql = """ UPDATE \"ride\"
+    SET \"origin\" = %s, \"destination\" = %s, \"status\" = %s
+    WHERE \"reg_no\" = %s AND \"start_time\" = %s
      """
     db = connect()
     res = None
     try:
         cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-        cur.execute(sql, (newOrigin, newDestination, rideId,))
+        cur.execute(sql, (newOrigin, newDestination, status, reg_no, start_time))
         db.commit()
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
@@ -118,7 +118,7 @@ def updateRide(rideId, newOrigin, newDestination):
 
 def searchRides(origin, destination):
     sql = """
-    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no
+    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.current_pax
     FROM ride r, "user" u, car c
     WHERE r.reg_no = c.reg_no
     and c.email = u.email

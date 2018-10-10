@@ -101,7 +101,7 @@
   <body>
       <form method="post">
         <div class="route-option">
-          <div class="padding-with-circle mui--text-title">Driver Name: {{user.Name}}</div>
+          <div class="padding-with-circle mui--text-title">Driver Name: {{users.last_name}} {{users.first_name}} </div>
           <br/>
           <div class="mui-container-fluid">
 			
@@ -132,34 +132,32 @@
               <div class="auto-width mui-col-md-11">
                 <span class="time-info mui--text-body2">Pick Up Time</span>
                 <div class="mui-textfield">
-                  <input type="date" name="rideDateTime" value="">
+                  <input type="datetime-local" name="rideDateTime" value="">
                 </div>
               </div>
             </div>
             <br/>
 			
-            <div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                <div class="circle red"></div>
-              </div>
+			<div class="mui-row">
               <div class="auto-width mui-col-md-11">
-                <span class="time-info mui--text-body2">End Time</span>
+                <span class="time-info mui--text-body2">Car</span>
                 <div class="mui-textfield">
-                  <input type="time" name="rideEndTime" value="">
+                  <select name="car" value="">
+						{% for car in cars %}
+						<option value="{{ car.reg_no }}">{{ car.reg_no }}</option>
+						{% endfor %}
+				  </select>
                 </div>
               </div>
             </div>
-			<br/>
+			
 			
             <div class="mui-row">
               <div class="auto-width mui-col-md-11">
                 <span class="time-info mui--text-body2">Status</span>
                 <div class="mui-textfield">
                   <select name="status" value="">
-						<option value="Pending">Pending</option>
-						<option value="In Progress">In Progress</option>
-						<option value="Completed">Completed</option>
-						<option value="NeverGonnaGiveYouUp">Never gonna give you up</option>
+						<option value="in progress">Pending</option>
 				  </select>
                 </div>
               </div>
@@ -167,6 +165,7 @@
 			
           </div>
           <button type="submit" class="mui-btn mui-btn--raised">Add</button>
+		  <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
         </div>
       </form>
     </div>

@@ -84,66 +84,74 @@ def signup():
 def logout():
     session.pop('logged_in', None)
     return redirect('/login')
-
-@app.route('/updateRide')
-def renderUpdateRide():
-    rideId = request.args.get('rideid')
-    if rideId is None:
-        return redirect('/')
-    else:
-        try:
-            rideId = int(rideId)
-            user = ride.retrieveRide(rideId)
-            return render_template('updateRide.html', user=user);
-        except ValueError:
-            return redirect('/')
-
-
-@app.route("/updateRide", methods=['POST'])
-def updateRide():
-    newOrigin = request.form['newOrigin']
-    newDestination = request.form['newDestination']
-    rideId = request.args.get('rideid')
-    ride.updateRide(rideId, newOrigin, newDestination)
-    if rideId is None:
-        return redirect('/')
-    else:
-        user = ride.retrieveRide(rideId)
-        return redirect('/')
-
-
+	
 @app.route('/addRide')
-def renderAddRide():
-    nric = request.args.get('email')
-    if nric is None:
-        return redirect('/')
+def renderAddRide(): 
+    if session.get('logged_in') is None:
+        return redirect('/login')
     else:
         try:
-            nric = int(nric)
-            #users = user.retrieveUser(nric)
-            return render_template('addRide.html', user={'nric':'123456', 'Name':'jackie'});
+			users = user.retrieveUser(session.get('email'))
+			cars = car.retrieveCarsByEmail(session.get('email'))
+			return render_template('addRide.html', users=users, cars=cars);
         except ValueError:
-            return redirect('/')
+            return redirect('/')	
 
-
+			
 @app.route("/addRide", methods=['POST'])
 def addRide():
 	origin = request.form['origin']
 	destination = request.form['destination']
 	rideDateTime = request.form['rideDateTime']
-	rideEndTime = request.form['rideEndTime']
+	car = request.form['car']
+	pax = '0'
 	status = request.form['status']
-	nric = request.args.get('nric')
 
-	new_ride = { 'Driver': nric, 'RideDateTime':dt.date(2018,9,19), 'RideEndTime':dt.time(14,00),
-				 'Origin': origin, 'Destination' : destination, 'Status' : status}
-	ride.addRide(new_ride)
+	ride_details = { 'RideStartTime':rideDateTime, 'Status':status, 'Current_pax' :pax,
+				 'Origin':origin, 'Destination' :destination, 'reg_no' : car}
+	ride.addRide(ride_details)
 
-	if nric is None:
-		return redirect('/addRide')
+	if session.get('logged_in') is None:
+		return redirect('/login')
 	else:
-		user = ride.retrieveAllRide()
-        return redirect('/')
+		origin = ""
+		destination = ""
+		list = ride.searchRides(origin, destination)
+        return render_template('index.html', email = session.get('logged_in')['email'], rides = list, origin = origin, destination = destination);
+	
+	
+
+@app.route('/updateRide')
+def renderUpdateRide():	
+	reg_no = request.args.get('regno')
+	start_time = request.args.get('starttime')
+	if reg_no is None:
+		return redirect('/')
+	else:
+		try:
+			ride_details = { 'start_time':start_time, 'reg_no' : reg_no}
+			rides = ride.retrieveRide(ride_details)
+			return render_template('updateRide.html', rides=rides);
+		except ValueError:
+			return redirect('/')
+
+
+@app.route("/updateRide", methods=['POST'])
+def updateRide():
+	origin = request.form['origin']
+	destination = request.form['destination']
+	status = request.form['status']
+	reg_no = request.args.get('regno')
+	start_time = request.args.get('starttime') 
+	ride.updateRide(status, origin, destination, reg_no, start_time) 
+	if reg_no is None:
+		return redirect('/')
+	else:
+		origin = ""
+		destination = ""
+		list = ride.searchRides(origin, destination)
+		return render_template('index.html', email = session.get('logged_in')['email'], rides = list, origin = origin, destination = destination);
+
 
 @app.route("/searchRides", methods=['POST'])
 def searchRides():
