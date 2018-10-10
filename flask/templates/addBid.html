@@ -1,13 +1,14 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="//cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
-    <script src="//cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <style>
-      body {
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="http://cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
+  <script src="http://cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <style>
+    body {
         font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma
       }
 
@@ -44,24 +45,46 @@
         width: auto;
       }
 
-      .mui-textfield>input, .mui-textfield>textarea {
-        border-bottom-width: 0px;
-      }
 
       .mui-textfield {
         padding: 0px;
       }
     </style>
-  </head>
-  <body>
-      <div class="heading">
-        <div class="mui--text-subhead">Bid For Ride</div>
+</head>
+
+<body>
+  <div class="heading">
+    <div class="mui--text-subhead">Bid For Ride</div>
+  </div>
+  <div class="mui-container-fluid">
+    <div class="mui-row">
+      <div class="mui-col-md-2">
+        <div class="mui-container-fluid">
+          <span class="numberplate-info mui--text-body2">Trip Detail</span>
+          <br/> <br/>
+          <div class="mui-row">
+            From : {{ ride.origin }}
+          </div>
+          <br/>
+          <div class="mui-row">
+            To : {{ ride.destination }}
+          </div>
+          <br/>
+          <div class="mui-row">
+            On : {{ ride.start_time }} 
+          </div>
+          <!-- Maybe some Car details??-->
+          <br/>
+          <div class="mui-row">
+            Vehicle Number: {{ ride.reg_no }}
+          </div>
       </div>
+    </div>
+      <div class="mui-col-md-7">
       <form method="post">
-        <div class="route-option">
           <div class="mui-container-fluid">
             <div class="mui-row">
-              <div class="auto-width mui-col-md-11">
+              <div class="mui-col-md-5">
                 <span class="numberplate-info mui--text-body2">Price</span>
                 <div class="mui-textfield">
                   <input type="text" name="price" value="" placeholder="$1337.00">
@@ -70,38 +93,32 @@
             </div>
             <br/>
             <div class="mui-row">
-              <div class="auto-width mui-col-md-11">
+              <div class="mui-col-md-5">
                 <span class="numberplate-info mui--text-body2">Number of Pax</span>
                 <div class="mui-textfield">
                   <input type="text" name="no_pax" value="" placeholder="E.g. SGB1234X">
                 </div>
+
               </div>
             </div>
             <br/>
 
-            <div class="mui-row">
-              <div class="auto-width mui-col-md-11">
-                <span class="model-info mui--text-body2">Ride</span>
-                <div class="mui-textfield">
-                  <select name="ride_detail" value="">
-                    {% for ride in rides %}
-                    <option value="{{ ride.reg_no }}/{{ ride.start_time }}">{{ ride.reg_no }} | {{ ride.start_time }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-              </div>
-            </div>
-
+            <input type="hidden" name="reg_no" value= '{{ ride.reg_no }}' />
+            <input type="hidden" name="start_time" value='{{ ride.start_time }}' />
 
           </div>
-          <button type="submit" class="mui-btn mui-btn--raised">Add</button>
-        </div>
-      </form>
+          <button type="submit" class="mui-btn mui-btn--raised">Bid</button>
+        </form>
+      </div>
     </div>
-    <script>
-      $(document).ready(function(){
+  </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
 
     });
-    </script>
-  </body>
+  </script>
+</body>
+
 </html>

@@ -36,7 +36,7 @@ def add_bid(bid_detail):
     return res
 
 # Get bid for the owner to approve or list all bid
-def get_bid(reg_no):
+def get_bid(email):
 	sql= """
 	SELECT rb.reg_no,c.email as owner, rb.email as bidder, r.origin,r.destination,rb.start_time,rb.status, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
 	FROM ride_bid rb
@@ -47,10 +47,10 @@ def get_bid(reg_no):
 	"""
 	db = connect()
 	res = None
-	reg_no = '%' + reg_no+'%'
+	email = '%' + email +'%'
 	try:
 		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-		cur.execute(sql,(reg_no,))
+		cur.execute(sql,(email,))
 		res = cur.fetchall()
 		cur.close()
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -103,6 +103,22 @@ def bid_approval(email,reg_no,start_time,status):
 			db.close()
 	return res
 
+def get_single_bid(email,reg_no,start_time):
+	sql = """SELECT * from ride_bid where email = %s and reg_no = %s and start_time = %s and status='pending'"""
+	db = connect()
+	res = None
+	try:
+		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+		cur.execute(sql,(email,reg_no,start_time))
+		res = cur.fetchone()
+		cur.close()
+	except (Exception, psycopg2.DatabaseError) as error:
+	    print error
+	finally:
+	    if db is not None:
+	        db.close()
+	return res
+
 def update_bid(reg_no,start_time,bid_price):
     return 0
 
@@ -115,5 +131,7 @@ if __name__ == '__main__':
 		'email':'owerv@tamu.edu'
 	}
 	#print add_bid(test_user)
-	print get_bid('')
+	print get_bid('wpicklessi@geocities.com')
+	#print get_single_bid('a@a.com','SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)))
+	
 	#print bid_approval('owerv@tamu.edu','SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)),'successful')

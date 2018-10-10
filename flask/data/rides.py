@@ -50,10 +50,13 @@ def addRide(ride_details):
 def retrieveAllRide():
     sql = """
     SELECT u.first_name, r.origin,r.destination,r.status,r.reg_no,r.start_time
-    FROM ride r, "user" u, car c
+    FROM ride r, "user" u, car c,model m
     WHERE r.reg_no = c.reg_no
-    and c.email = u.email
+    AND c.email = u.email
+    AND c.make = m.make
+    and c.model = m.model
     and r.status = 'in progress'
+    and r.current_pax < m.capacity
     ORDER BY r.start_time ASC
      """
     db = connect()
@@ -72,7 +75,7 @@ def retrieveAllRide():
 
 def retrieveRide(ride_detail):
     sql = """
-        SELECT u.first_name, r.origin,r.destination,r.status
+        SELECT u.first_name, r.origin,r.destination,r.status,r.start_time,r.reg_no
         from ride r, "user" u, car c
         WHERE r.reg_no = c.reg_no
         and c.email = u.email
@@ -83,7 +86,7 @@ def retrieveRide(ride_detail):
     res = None
     try:
         cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-        cur.execute(sql, (ride_detail['RideStartTime'],ride_detail['reg_no']))
+        cur.execute(sql, (ride_detail['start_time'],ride_detail['reg_no']))
         res = cur.fetchone()
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:

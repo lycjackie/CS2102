@@ -142,7 +142,7 @@ def addRide():
 	if nric is None:
 		return redirect('/addRide')
 	else:
-		user = ride.retrieveAllRide();
+		user = ride.retrieveAllRide()
         return redirect('/')
 
 @app.route("/searchRides", methods=['POST'])
@@ -159,7 +159,7 @@ def renderListCar():
         return redirect('/login')
     else:
         cars = car.retrieveCarsByEmail(session.get('email'))
-        return render_template('listCar.html', cars = cars);
+        return render_template('listCar.html', cars = cars)
 
 @app.route('/addCar')
 def renderAddCar():
@@ -168,7 +168,7 @@ def renderAddCar():
         return redirect('/login')
     else:
         models = model.retrieveAllModels()
-        return render_template('addCar.html', models = models);
+        return render_template('addCar.html', models = models)
 
 @app.route("/addCar", methods=['POST'])
 def addCar():
@@ -198,7 +198,7 @@ def renderUpdateCar():
         if update_car is None:
             return redirect('/listCar')
         else:
-            return render_template('updateCar.html', car = update_car, models = models);
+            return render_template('updateCar.html', car = update_car, models = models)
 
 @app.route("/updateCar", methods=['POST'])
 def updateCar():
@@ -219,10 +219,24 @@ def renderAddBid():
     if session.get('logged_in') is None:
         return redirect('/login')
     else:
-        rides = ride_bid.get_available_bidding()
-        return render_template('addBid.html',rides=rides)
+        #if session.get('reg_no') is None and session.get('start_time') is None:
+        #    return redirect('/') # by right should go back to list ride
+        #else:
+        # ride_detail = {
+        #   'reg_no' : session.get('reg_no'),
+        #   'start_time : dt.datetime.strptime(session.get('start_time'),'%Y-%m-%d %H:%M:%S')
+        # }
+        ride_detail = {
+            'reg_no':'SGX1337X',
+	        'start_time': dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00))
+        }
+        
+        rides = ride.retrieveRide(ride_detail)
+        return render_template('addBid.html',ride=rides)
+
 
 '''
+    retrieveRide(ride_detail)
 	test_user = {
 	    'reg_no':'SGX1337X',
 	    'start_time': dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)),
@@ -237,11 +251,11 @@ def addBid():
         return redirect('/login')
     else:
         price = request.form['price']
-        ride_detail = request.form['ride_detail'].split('/')
+        #ride_detail = request.form['ride_detail'].split('/')
         no_pax = request.form['no_pax']
-        start_time =  dt.datetime.strptime(ride_detail[1],'%Y-%m-%d %H:%M:%S')
+        start_time =  dt.datetime.strptime(request.form['start_time'],'%Y-%m-%d %H:%M:%S')
         print start_time
-        reg_no = ride_detail[0]
+        reg_no = request.form['reg_no']
         ride_details = {
             'reg_no' : reg_no,
             'start_time': start_time,
