@@ -122,7 +122,7 @@ def get_AllBidForSingleRide(reg_no,start_time):
 	INNER JOIN car c on r.reg_no = c.reg_no
 	INNER JOIN \"user\" u on rb.email = u.email
 	where rb.reg_no = %s
-	and rb.start_time = %s 
+	and rb.start_time = %s
 	and rb.status = 'pending'
 	"""
 	db = connect()
@@ -143,7 +143,7 @@ def update_bid(email,reg_no,start_time,bid_price,total_pax):
 	sql = """
 	UPDATE ride_bid rb
 	SET bid_price = %s , no_pax = %s
-	WHERE rb.email = %s 
+	WHERE rb.email = %s
 	AND	rb.start_time = %s
 	AND rb.reg_no = %s
 	"""
@@ -161,9 +161,30 @@ def update_bid(email,reg_no,start_time,bid_price,total_pax):
 	finally:
 		if db is not None:
 			db.close()
-	return res	
+	return res
 
-
+def success_bid(email,reg_no,start_time):
+	sql = """
+	SELECT *
+	FROM ride_bid rb
+	WHERE email = %s
+	AND reg_no = %s
+	AND start_time = %s
+	AND status = 'successful'
+	"""
+	db = connect()
+	res = None
+	try:
+		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+		cur.execute(sql,(email,reg_no,start_time))
+		res = cur.fetchall()
+		cur.close()
+	except (Exception, psycopg2.DatabaseError) as error:
+	    print error
+	finally:
+	    if db is not None:
+	        db.close()
+	return res
 
 if __name__ == '__main__':
 	test_user = {
@@ -178,5 +199,5 @@ if __name__ == '__main__':
 	#print get_AllBidForSingleRide('SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)))
 	#a =  getSingleBid('a@a.com','SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)))
 
-	
+
 	#print approve_bid('a@a.com','SGX1337X',dt.datetime.strptime('2018-09-19 14:00:00','%Y-%m-%d %H:%M:%S'),'unsuccessful','wpicklessi@geocities.com')

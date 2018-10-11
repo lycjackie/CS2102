@@ -122,7 +122,8 @@ def searchRides(origin, destination):
     FROM ride r, "user" u, car c
     WHERE r.reg_no = c.reg_no
     and c.email = u.email
-    and LOWER(r.origin) LIKE LOWER(%s) and LOWER(r.destination) like (%s)
+    and LOWER(r.origin) LIKE LOWER(%s) and LOWER(r.destination) like LOWER(%s)
+	and r.status = 'in progress'
     ORDER BY r.start_time ASC
      """
     db = connect()

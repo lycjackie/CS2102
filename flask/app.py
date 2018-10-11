@@ -150,8 +150,8 @@ def addRide():
 		origin = ""
 		destination = ""
 		list = ride.searchRides(origin, destination)
-        return render_template('index.html', email=session.get('logged_in')['email'], rides=list, origin=origin, destination=destination)
-
+        #return render_template('index.html', email=session.get('email'), rides=list, origin=origin, destination=destination)
+        return redirect('/')
 
 @app.route('/updateRide')
 def renderUpdateRide():
@@ -182,7 +182,7 @@ def updateRide():
 		origin = ""
 		destination = ""
 		list = ride.searchRides(origin, destination)
-		return render_template('index.html', email=session.get('logged_in')['email'], rides=list, origin=origin, destination=destination)
+		return render_template('index.html', email=session.get('email'), rides=list, origin=origin, destination=destination)
 
 
 @app.route("/searchRides", methods=['POST'])
@@ -402,7 +402,12 @@ def renderBidPage():
 		return redirect('/')
 	else:
 		try:
+
 			ride_details = {'start_time': start_time, 'reg_no': reg_no}
+			email = session.get('email')
+			checker = ride_bid.success_bid(email,reg_no,start_time)
+			if checker is not None:
+			    return render_template('addBid.html',invalid='1')
 			rides = ride.retrieveRide(ride_details)
 			return render_template('addBid.html', ride=rides)
 		except ValueError:
@@ -457,16 +462,19 @@ def Update_Bid():
     if session.get('email') is None:
         return redirect('/login')
     else:
-        reg_no = request.form['reg_no']
-        start_time = dt.datetime.strptime(request.form['start_time'], '%Y-%m-%d %H:%M:%S')
-        price = request.form['price']
-        no_pax = request.form['no_pax']
-        email = session.get('email')
-        res = ride_bid.update_bid(email,reg_no,start_time,price,no_pax)
-        if res != -1:
+        try:
+            reg_no = request.form['reg_no']
+            start_time = dt.datetime.strptime(request.form['start_time'], '%Y-%m-%d %H:%M:%S')
+            price = request.form['price']
+            no_pax = request.form['no_pax']
+            email = session.get('email')
+            res = ride_bid.update_bid(email,reg_no,start_time,price,no_pax)
+            if res != -1:
+                return redirect('/')
+            else:
+                return redirect('/login')
+        except ValueError:
             return redirect('/')
-        else:
-            return redirect('/login')
 
 
 if __name__ == '__main__':

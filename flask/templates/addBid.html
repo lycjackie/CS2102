@@ -61,6 +61,20 @@
         border-left: 1px solid #333;
         padding: 20px 0px 20px 10px;
       }
+      #error {
+        position: absolute;
+        background-color: #88CCF1;
+        top: 200px;
+        left: 10vw;
+        width: calc(80vw - 40px);
+        border-radius: 15px;
+        color: white;
+        padding: 20px;
+        transition: top 0.5s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     </style>
 </head>
 
@@ -72,6 +86,11 @@
     <div class="mui--text-subhead">Bid For Ride</div>
     {% endif %}
   </div>
+      {% if invalid %}
+        <div id="error">
+          <p>You have already successfully bid for the ride</p>
+        </div>
+        {% else %}
   <div class="mui-container-fluid">
     <div class="mui-row">
       <div class="mui-col-md-2">
@@ -123,11 +142,13 @@
           {% else %}
           <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Bid</button>
 	        <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
+
           {% endif %}
         </form>
       </div>
     </div>
   </div>
+  {% endif %}
   </div>
 
   <script>
