@@ -393,8 +393,10 @@ def add_user_bid():
                 'email':session.get('email')
             }
             res = ride_bid.add_bid(ride_detail)
-            if res is not None:
-                return redirect('/') # maybe need some page for landing
+            if res is None:
+                redirect('/login')
+            else:
+                redirect('/')
         except Exception:
             return redirect('/')
 
