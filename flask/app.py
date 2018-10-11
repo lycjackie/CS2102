@@ -42,7 +42,7 @@ def main():
     list = ride.searchRides(origin, destination)
     print list
 
-    return render_template('index.html', email=session.get('logged_in')['email'], rides=list, origin=origin, destination=destination)
+    return render_template('index.html', email=session.get('email'), rides=list, origin=origin, destination=destination)
 
 
 @app.route('/login')
@@ -55,9 +55,7 @@ def login():
     email = request.form['email']
     u = user.retrieveUser({'email': email})
     if len(u) > 0:
-        session['logged_in'] = {
-            'email': json.dumps(u[0])
-        }
+        session['logged_in'] = u
         session['email'] = email
         return redirect('/')
     else:
@@ -92,6 +90,33 @@ def logout():
     session.pop('logged_in', None)
     return redirect('/login')
 
+
+@app.route('/updateUser')
+def renderUpdateUser():
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        print session.get('logged_in')
+        try:
+            return render_template('updateUser.html', first_name=session.get('logged_in')[0][2], last_name=session.get('logged_in')[0][3])
+        except ValueError:
+            return redirect('/')
+
+
+@app.route('/updateUser', methods=['POST'])
+def updateUser():
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    email = session.get('email')
+    user.updateUser(email, first_name, last_name)
+    u = user.retrieveUser({'email': email})
+    if len(u) > 0:
+        session['logged_in'] = u
+        session['email'] = email
+    if session.get('logged_in') is None:
+		return redirect('/login')
+    else:
+        return redirect('/')
 
 @app.route('/addRide')
 def renderAddRide():

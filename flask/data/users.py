@@ -39,6 +39,25 @@ def addUser(user):
     return s
 
 
+def updateUser(email, first_name, last_name):
+    sql = "UPDATE \"user\" SET first_name = %s, last_name = %s WHERE email = %s;"
+    s = None
+    db = connect()
+    try:
+        cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+
+        cur.execute(sql, (first_name, last_name, email))
+        # finish
+        db.commit()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if db is not None:
+            db.close()
+
+    return
+
 
 def retrieveUser(user):
     sql = "SELECT * FROM \"user\" Where \"email\" = %s;"
