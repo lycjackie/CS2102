@@ -27,10 +27,6 @@
         width: calc(100vw - 40px);
       }
 
-      .content {
-        padding-top: 145px;
-      }
-
       .routing-field {
         background-color: #f9f9f9;
         padding: 10px;
@@ -64,10 +60,10 @@
       .approve-btn {
         position: absolute;
         top: 60px;
-        right: 15px; 
+        right: 15px;
       }
       .approve-btn > .icon {
-        color: #36d7b7   
+        color: #36d7b7
       }
 
       #toolbar {
@@ -87,17 +83,17 @@
       }
 
       .create-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
         color: #19b5fe;
       }
 
       .car-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
         color: #fe000a;
       }
 
       .exit-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
       }
 
       .time-info {
@@ -151,43 +147,56 @@
         border-bottom-width: 0px;
       }
 
+      .home-btn > .icon {
+        font-size: 4em;
+        color: #fe000a;
+      }
+
       .mui-textfield {
         padding: 0px;
+      }
+
+      /* COPY ALL BELOW FOR MENU CONSISTENCY */
+      #toolbar {
+        z-index: 201;
+      }
+
+      #overlay {
+        background-color: rgba(0, 0, 0, 0.4);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 200;
+      }
+
+      #toolbar > button {
+          background-color: white;
+          border-radius: 50px;
+          width: 56px;
+          height: 56px;
+          box-shadow: 0 0 10px #999;
+          justify-content: center;
+          align-items: center;
+      }
+
+      .menu-btn > .icon {
+        font-size: 2em;
+      }
+
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+
+      .fill-parent {
+        height: 100%;
+        width: 100%;
       }
     </style>
   </head>
   <body>
-    <form class="routing-form">
-      <div class="routing-field">
-        <div class="mui-container-fluid">
-          <div class="mui-row">
-            <div class="center-content mui-col-md-1" style="height:32px">
-              <div class="circle green"></div>
-            </div>
-            <div class="mui-col-md-11">
-              <div class="clear-margin mui-textfield">
-                <input id="origin" name="origin" type="text" placeholder="Pick Up Address" value="{{origin}}">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="routing-field">
-        <div class="mui-container-fluid">
-          <div class="mui-row">
-            <div class="center-content mui-col-md-1" style="height:32px">
-              <div class="circle red"></div>
-            </div>
-            <div class="mui-col-md-11">
-              <div class="clear-margin mui-textfield">
-                <input id="destination" name="destination" type="text" placeholder="Destination Address" value="{{destination}}">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button id="submit" style="display:none" type="submit"></button>
-    </form>
+    <div id="overlay" class="fill-parent menu-item">
+    </div>
     <div class="content">
       <div class="routing-heading">
         <div class="mui--text-subhead">All Current Bids</div>
@@ -225,51 +234,52 @@
             <button class="approve-btn" onclick="location.href = '/approveBid?regno={{ bid.reg_no }}&starttime={{ bid.start_time }}&email={{ bid.bidder }}'">
               <i class="icon material-icons">beenhere</i>
             </button>
-            
+
           </div>
         </div>
 	   {% endfor %}
     </div>
     <div id="toolbar">
-      <button class="create-btn" onclick="location.href = '/addRide'">
+      <button class="create-btn menu-item" onclick="location.href = '/addRide'">
         <i class="icon material-icons">add_circle</i>
       </button>
       <br />
       <br />
-      <button class="car-btn" onclick="location.href = '/listCar'">
-        <i class="icon material-icons">directions_car</i>
+      <button class="home-btn menu-item" onclick="location.href = '/'">
+        <i class="icon material-icons">home</i>
       </button>
       <br />
       <br />
-      <button class="exit-btn" onclick="location.href = '/logout'">
+      <button class="exit-btn menu-item" onclick="location.href = '/logout'">
         <i class="icon material-icons">exit_to_app</i>
+      </button>
+      <br />
+      <br />
+      <button id="menu" class="menu-btn">
+        <i class="icon material-icons">menu</i>
       </button>
     </div>
     <script>
-      $(document).ready(function(){
-        originIn = document.getElementById("origin")
-        destIn = document.getElementById("destination")
+      main();
 
-        originIn.addEventListener("keyup", function(event){
-          // Cancel the default action, if needed
-          event.preventDefault();
-          // Number 13 is the "Enter" key on the keyboard
-          if (event.keyCode === 13) {
-            // Trigger the button element with a click
-            document.getElementById("submit").click();
+      function main(){
+        menuItems = document.getElementsByClassName("menu-item");
+        for(i = 0; i < menuItems.length; i++) {
+          menuItems[i].style.display = "none";
+        }
+
+        document.getElementById("menu").addEventListener("click", function(event){
+          menuItems = document.getElementsByClassName("menu-item");
+          for(i = 0; i < menuItems.length; i++) {
+            if(menuItems[i].style.display === "none"){
+              menuItems[i].style.display = "flex";
+            }
+            else{
+              menuItems[i].style.display = "none";
+            }
           }
         })
-
-        destIn.addEventListener("keyup", function(event){
-          // Cancel the default action, if needed
-          event.preventDefault();
-          // Number 13 is the "Enter" key on the keyboard
-          if (event.keyCode === 13) {
-            // Trigger the button element with a click
-            document.getElementById("submit").click();
-          }
-        })
-      })
+      }
     </script>
   </body>
 </html>

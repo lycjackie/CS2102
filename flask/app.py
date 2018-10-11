@@ -6,6 +6,8 @@ import datetime as dt
 import importlib
 import random
 import urlparse
+import simplejson as json
+import decimal as Decimal
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = "super secret key"
@@ -52,10 +54,9 @@ def renderLogin():
 def login():
     email = request.form['email']
     u = user.retrieveUser({'email': email})
-    print u
     if len(u) > 0:
         session['logged_in'] = {
-            'email': u[0]
+            'email': json.dumps(u[0])
         }
         session['email'] = email
         return redirect('/')

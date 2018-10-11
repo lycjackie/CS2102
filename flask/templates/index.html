@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="//cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
     <style>
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+
+      .fill-parent {
+        height: 100%;
+        width: 100%;
+      }
+
       body {
         font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma
       }
@@ -64,20 +74,28 @@
       .approve-btn {
         position: absolute;
         top: 60px;
-        right: 15px; 
+        right: 15px;
       }
       .approve-btn > .icon {
-        color: #36d7b7   
+        color: #36d7b7
       }
       .bid-btn {
         position: absolute;
         top: 90px;
-        right: 15px; 
+        right: 15px;
       }
       .bid-btn > .icon {
         color:#19b5fe
       }
 
+      #overlay {
+        background-color: rgba(0, 0, 0, 0.4);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 200;
+      }
+
       #toolbar {
         position: fixed;
         bottom: 30px;
@@ -92,20 +110,35 @@
         right: 30px;
         display: flex;
         flex-direction: column;
+        z-index: 201;
+      }
+
+      #toolbar > button {
+          background-color: white;
+          border-radius: 50px;
+          width: 56px;
+          height: 56px;
+          box-shadow: 0 0 10px #999;
+          justify-content: center;
+          align-items: center;
       }
 
       .create-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
         color: #19b5fe;
       }
 
       .car-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
         color: #fe000a;
       }
 
       .exit-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
+      }
+
+      .menu-btn > .icon {
+        font-size: 2em;
       }
 
       .time-info {
@@ -165,6 +198,8 @@
     </style>
   </head>
   <body>
+    <div id="overlay" class="fill-parent menu-item">
+    </div>
     <form class="routing-form">
       <div class="routing-field">
         <div class="mui-container-fluid">
@@ -225,27 +260,27 @@
               <br/>
 			<div class="mui-row">
               <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                <div class="circle green"></div>
+                <div class="circle"></div>
               </div>
               <div class="auto-width mui-col-md-11">
                 <span class="location-info mui--text-body1">{{ride.start_time}}</span>
               </div>
             </div>
 			<br/>
-			
+
 			<div class="mui-row">
               <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                <div class="circle green"></div>
+                <div class="circle"></div>
               </div>
               <div class="auto-width mui-col-md-11">
                 <span class="location-info mui--text-body1">Current Pax : {{ride.current_pax}}</span>
               </div>
             </div>
 			<br/>
-			
 
-			
-			
+
+
+
             <button class="edit-btn" onclick="location.href = '/updateRide?regno={{ ride.reg_no }}&starttime={{ ride.start_time }}'">
               <i class="icon material-icons">edit</i>
             </button>
@@ -261,22 +296,29 @@
 	   {% endfor %}
     </div>
     <div id="toolbar">
-      <button class="create-btn" onclick="location.href = '/addRide'">
+      <button class="create-btn menu-item" onclick="location.href = '/addRide'">
         <i class="icon material-icons">add_circle</i>
       </button>
       <br />
       <br />
-      <button class="car-btn" onclick="location.href = '/listCar'">
+      <button class="car-btn menu-item" onclick="location.href = '/listCar'">
         <i class="icon material-icons">directions_car</i>
       </button>
       <br />
       <br />
-      <button class="exit-btn" onclick="location.href = '/logout'">
+      <button class="exit-btn menu-item" onclick="location.href = '/logout'">
         <i class="icon material-icons">exit_to_app</i>
+      </button>
+      <br />
+      <br />
+      <button id="menu" class="menu-btn">
+        <i class="icon material-icons">menu</i>
       </button>
     </div>
     <script>
-      $(document).ready(function(){
+      main()
+
+      function main(){
         originIn = document.getElementById("origin")
         destIn = document.getElementById("destination")
 
@@ -299,7 +341,24 @@
             document.getElementById("submit").click();
           }
         })
-      })
+
+        menuItems = document.getElementsByClassName("menu-item");
+        for(i = 0; i < menuItems.length; i++) {
+          menuItems[i].style.display = "none";
+        }
+
+        document.getElementById("menu").addEventListener("click", function(event){
+          menuItems = document.getElementsByClassName("menu-item");
+          for(i = 0; i < menuItems.length; i++) {
+            if(menuItems[i].style.display === "none"){
+              menuItems[i].style.display = "flex";
+            }
+            else{
+              menuItems[i].style.display = "none";
+            }
+          }
+        })
+      }
     </script>
   </body>
 </html>

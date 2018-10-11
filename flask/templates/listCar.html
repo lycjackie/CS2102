@@ -57,16 +57,16 @@
       }
 
       .create-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
         color: #19b5fe;
       }
 
       .exit-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
       }
 
       .home-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
         color: #fe000a;
       }
 
@@ -120,9 +120,48 @@
       .mui-textfield {
         padding: 0px;
       }
+
+      /* COPY ALL BELOW FOR MENU CONSISTENCY */
+      #toolbar {
+        z-index: 201;
+      }
+
+      #overlay {
+        background-color: rgba(0, 0, 0, 0.4);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 200;
+      }
+
+      #toolbar > button {
+          background-color: white;
+          border-radius: 50px;
+          width: 56px;
+          height: 56px;
+          box-shadow: 0 0 10px #999;
+          justify-content: center;
+          align-items: center;
+      }
+
+      .menu-btn > .icon {
+        font-size: 2em;
+      }
+
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+
+      .fill-parent {
+        height: 100%;
+        width: 100%;
+      }
     </style>
   </head>
   <body>
+    <div id="overlay" class="fill-parent menu-item">
+    </div>
     <div class="content">
       <div class="heading">
         <div class="mui--text-subhead">Available Cars</div>
@@ -150,24 +189,46 @@
 	   {% endfor %}
     </div>
     <div id="toolbar">
-      <button class="create-btn" onclick="location.href = '/addCar'">
+      <button class="create-btn menu-item" onclick="location.href = '/addCar'">
         <i class="icon material-icons">add_circle</i>
       </button>
       <br />
       <br />
-      <button class="home-btn" onclick="location.href = '/'">
+      <button class="home-btn menu-item" onclick="location.href = '/'">
         <i class="icon material-icons">home</i>
       </button>
       <br />
       <br />
-      <button class="exit-btn" onclick="location.href = '/logout'">
+      <button class="exit-btn menu-item" onclick="location.href = '/logout'">
         <i class="icon material-icons">exit_to_app</i>
+      </button>
+      <br />
+      <br />
+      <button id="menu" class="menu-btn">
+        <i class="icon material-icons">menu</i>
       </button>
     </div>
     <script>
-      $(document).ready(function(){
+    main();
 
+    function main(){
+      menuItems = document.getElementsByClassName("menu-item");
+      for(i = 0; i < menuItems.length; i++) {
+        menuItems[i].style.display = "none";
+      }
+
+      document.getElementById("menu").addEventListener("click", function(event){
+        menuItems = document.getElementsByClassName("menu-item");
+        for(i = 0; i < menuItems.length; i++) {
+          if(menuItems[i].style.display === "none"){
+            menuItems[i].style.display = "flex";
+          }
+          else{
+            menuItems[i].style.display = "none";
+          }
+        }
       })
+    }
     </script>
   </body>
 </html>
