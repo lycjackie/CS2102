@@ -54,7 +54,11 @@
 
 <body>
   <div class="heading">
+      {% if update %}
+      <div class="mui--text-subhead">Update Your Bid</div>
+      {% else %}
     <div class="mui--text-subhead">Bid For Ride</div>
+    {% endif %}
   </div>
   <div class="mui-container-fluid">
     <div class="mui-row">
@@ -107,7 +111,12 @@
             <input type="hidden" name="start_time" value='{{ ride.start_time }}' />
 
           </div>
+          {% if update %}
+          <input type="hidden" name="update" value= '1' />
+          <button type="submit" class="mui-btn mui-btn--raised">Update</button>
+          {% else %}
           <button type="submit" class="mui-btn mui-btn--raised">Bid</button>
+          {% endif %}
         </form>
       </div>
     </div>

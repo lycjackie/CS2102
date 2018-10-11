@@ -236,6 +236,7 @@ def updateCar():
             reg_no, make_model[0], make_model[1], colour)
         return redirect('/listCar')
 
+
 '''
 @app.route("/addBid")
 def renderAddBid():
@@ -325,21 +326,24 @@ def renderApprovePage():
     except Exception:
         return redirect('/')
 
+
 @app.route('/approveBid')
 def renderApproveBid():
     reg_no = request.args.get('regno')
-    start_time = dt.datetime.strptime(request.args.get('starttime'),'%Y-%m-%d %H:%M:%S')
+    start_time = dt.datetime.strptime(
+        request.args.get('starttime'), '%Y-%m-%d %H:%M:%S')
     email = request.args.get('email')
     if reg_no is None:
         return redirect('/')
     else:
         try:
-            bid = ride_bid.getSingleBid(email,reg_no,start_time)
+            bid = ride_bid.getSingleBid(email, reg_no, start_time)
             return render_template('approveBid.html', bid=bid)
         except ValueError:
             return redirect('/')
 
-@app.route('/approveBid',methods=['POST'])
+
+@app.route('/approveBid', methods=['POST'])
 def approve_bid():
     if session.get('email') is None:
         return redirect('/login')
@@ -347,20 +351,23 @@ def approve_bid():
         try:
             bidder_email = request.form['bidder_email']
             reg_no = request.form['reg_no']
-            start_time = dt.datetime.strptime(request.form['start_time'],'%Y-%m-%d %H:%M:%S')
+            start_time = dt.datetime.strptime(
+                request.form['start_time'], '%Y-%m-%d %H:%M:%S')
             owner_email = session.get('email')
             status = request.form['status']
-            bid = ride_bid.approve_bid(bidder_email.encode('utf8'),reg_no.encode('utf8'),start_time,status.encode('utf8'),owner_email.encode('utf8'))
-            #bid = ride_bid.approve_bid('a@a.com','SGX1337X',dt.datetime.strptime('2018-09-19 14:00:00','%Y-%m-%d %H:%M:%S'),'unsuccessful','wpicklessi@geocities.com')
+            bid = ride_bid.approve_bid(bidder_email.encode('utf8'), reg_no.encode(
+                'utf8'), start_time, status.encode('utf8'), owner_email.encode('utf8'))
+            # bid = ride_bid.approve_bid('a@a.com','SGX1337X',dt.datetime.strptime('2018-09-19 14:00:00','%Y-%m-%d %H:%M:%S'),'unsuccessful','wpicklessi@geocities.com')
             print bid
-            if bid is not None :
+            if bid is not None:
                 return redirect('/')
             else:
-                bid = ride_bid.getSingleBid(bidder_email,reg_no,start_time)
-                return render_template('approveBid.html', bid=bid)
+                bid = ride_bid.getSingleBid(bidder_email, reg_no, start_time)
+                return redirect('/login')
         except ValueError:
             print "ERROR"
             return redirect('/')
+
 
 @app.route('/bid')
 def renderBidPage():
@@ -376,30 +383,66 @@ def renderBidPage():
 		except ValueError:
 			return redirect('/')
 
-@app.route('/bid',methods=['POST'])
+
+@app.route('/bid', methods=['POST'])
 def add_user_bid():
     if session.get('email') is None:
         return redirect('/login')
     else:
         try:
             reg_no = request.form['reg_no']
-            start_time = dt.datetime.strptime(request.form['start_time'],'%Y-%m-%d %H:%M:%S')
+            start_time = dt.datetime.strptime(
+                request.form['start_time'], '%Y-%m-%d %H:%M:%S')
             no_pax = request.form['no_pax']
             price = request.form['price']
             ride_detail = {
-                'reg_no':reg_no,
+                'reg_no': reg_no,
                 'start_time': start_time,
                 'no_pax': no_pax,
                 'bid_price': price,
-                'email':session.get('email')
+                'email': session.get('email')
             }
             res = ride_bid.add_bid(ride_detail)
             if res is None:
-                redirect('/login')
+                return redirect('/login')
             else:
-                redirect('/')
+                return redirect('/')
         except Exception:
             return redirect('/')
+
+
+@app.route('/updateBid')
+def RenderUpdatePage():
+    reg_no = request.args.get('regno')
+    start_time = request.args.get('starttime')
+    email = session.get('email')
+    if reg_no is None:
+		return redirect('/')
+    else:
+        try:
+            rides = ride_bid.getSingleBid(email,reg_no,start_time)
+            update = '1'
+            print rides
+            return render_template('addBid.html', ride=rides,update=update)
+        except ValueError:
+            return redirect('/')
+
+@app.route('/updateBid',methods=['POST'])
+def Update_Bid():
+    if session.get('email') is None:
+        return redirect('/login')
+    else:
+        reg_no = request.form['reg_no']
+        start_time = dt.datetime.strptime(request.form['start_time'], '%Y-%m-%d %H:%M:%S')
+        price = request.form['price']
+        no_pax = request.form['no_pax']
+        email = session.get('email')
+        res = ride_bid.update_bid(email,reg_no,start_time,price,no_pax)
+        if res != -1:
+            return redirect('/')
+        else:
+            return redirect('/login')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

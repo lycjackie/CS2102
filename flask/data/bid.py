@@ -139,8 +139,31 @@ def get_AllBidForSingleRide(reg_no,start_time):
 	        db.close()
 	return res
 
-def update_bid(reg_no,start_time,bid_price):
-    return 0
+def update_bid(email,reg_no,start_time,bid_price,total_pax):
+	sql = """
+	UPDATE ride_bid rb
+	SET bid_price = %s , no_pax = %s
+	WHERE rb.email = %s 
+	AND	rb.start_time = %s
+	AND rb.reg_no = %s
+	"""
+	db = connect()
+	res = None
+	try:
+		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+		cur.execute(sql, (bid_price,total_pax,email,start_time,reg_no))
+		res = cur.rowcount
+		db.commit()
+		cur.close()
+	except (Exception, psycopg2.DatabaseError) as error:
+		print "Got Error:"
+		print error
+	finally:
+		if db is not None:
+			db.close()
+	return res	
+
+
 
 if __name__ == '__main__':
 	test_user = {
@@ -153,6 +176,7 @@ if __name__ == '__main__':
 	#print add_bid(test_user)
 	#print get_bid('wpicklessi@geocities.com')
 	#print get_AllBidForSingleRide('SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)))
-	#print get_single_bid('a@a.com','SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)))
+	#a =  getSingleBid('a@a.com','SGX1337X',dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)))
+
 	
-	print approve_bid('a@a.com','SGX1337X',dt.datetime.strptime('2018-09-19 14:00:00','%Y-%m-%d %H:%M:%S'),'unsuccessful','wpicklessi@geocities.com')
+	#print approve_bid('a@a.com','SGX1337X',dt.datetime.strptime('2018-09-19 14:00:00','%Y-%m-%d %H:%M:%S'),'unsuccessful','wpicklessi@geocities.com')
