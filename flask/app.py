@@ -40,12 +40,12 @@ def main():
     list = ride.searchRides(origin, destination)
     print list
 
-    return render_template('index.html', email=session.get('logged_in')['email'], rides=list, origin=origin, destination=destination);
+    return render_template('index.html', email=session.get('logged_in')['email'], rides=list, origin=origin, destination=destination)
 
 
 @app.route('/login')
 def renderLogin():
-    return render_template('login.html');
+    return render_template('login.html')
 
 
 @app.route('/login', methods=['POST'])
@@ -65,7 +65,7 @@ def login():
 
 @app.route('/signup')
 def renderSignup():
-    return render_template('signup.html');
+    return render_template('signup.html')
 
 
 @app.route('/signup', methods=['POST'])
@@ -100,7 +100,7 @@ def renderAddRide():
         try:
 			users = user.retrieveUser(session.get('email'))
 			cars = car.retrieveCarsByEmail(session.get('email'))
-			return render_template('addRide.html', users=users, cars=cars);
+			return render_template('addRide.html', users=users, cars=cars)
         except ValueError:
             return redirect('/')
 
@@ -124,7 +124,7 @@ def addRide():
 		origin = ""
 		destination = ""
 		list = ride.searchRides(origin, destination)
-        return render_template('index.html', email=session.get('logged_in')['email'], rides=list, origin=origin, destination=destination);
+        return render_template('index.html', email=session.get('logged_in')['email'], rides=list, origin=origin, destination=destination)
 
 
 @app.route('/updateRide')
@@ -156,7 +156,7 @@ def updateRide():
 		origin = ""
 		destination = ""
 		list = ride.searchRides(origin, destination)
-		return render_template('index.html', email=session.get('logged_in')['email'], rides=list, origin=origin, destination=destination);
+		return render_template('index.html', email=session.get('logged_in')['email'], rides=list, origin=origin, destination=destination)
 
 
 @app.route("/searchRides", methods=['POST'])
