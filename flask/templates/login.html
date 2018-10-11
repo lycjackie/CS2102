@@ -35,12 +35,14 @@
         background-color: #e74c3c;
         top: 50px;
         left: 10vw;
-        height: 50px;
         width: calc(80vw - 40px);
         border-radius: 15px;
         color: white;
         padding: 20px;
         transition: top 0.5s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       #container {
         display: flex;
@@ -81,7 +83,7 @@
     <div id="overlay" class="fill-parent">
     </div>
     {% if invalid %}
-      <div id="error" class="fill-parent">
+      <div id="error">
         <p>User authentication failed.{% if credentialError %} Email not found. {% else %} Please login to continue. {% endif %}</p>
       </div>
     {% endif %}

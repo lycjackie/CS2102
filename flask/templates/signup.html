@@ -30,6 +30,20 @@
         top: 0;
         left: 0;
       }
+      #error {
+        position: absolute;
+        background-color: #e74c3c;
+        top: 50px;
+        left: 10vw;
+        width: calc(80vw - 40px);
+        border-radius: 15px;
+        color: white;
+        padding: 20px;
+        transition: top 0.5s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
       #container {
         display: flex;
         justify-content: center;
@@ -68,6 +82,11 @@
   <body>
     <div id="overlay" class="fill-parent">
     </div>
+    {% if invalid %}
+      <div id="error">
+        <p>Email may already exists. Please try another email address or try again later.</p>
+      </div>
+    {% endif %}
     <div id="container" class="fill-parent">
       <div id="content">
         <div id="heading">CarPool</div>
@@ -96,6 +115,13 @@
       </div>
     </div>
     <script>
+      main();
+      function main() {
+        setTimeout(() => {
+          error = document.getElementById("error");
+          error.style.top = '-100px';
+        }, 4000);
+      }
     </script>
   </body>
 </html>

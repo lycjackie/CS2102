@@ -64,7 +64,7 @@ def login():
 
 @app.route('/signup')
 def renderSignup():
-    return render_template('signup.html')
+    return render_template('signup.html', invalid=request.args.get('invalid'))
 
 
 @app.route('/signup', methods=['POST'])
