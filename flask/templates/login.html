@@ -30,6 +30,18 @@
         top: 0;
         left: 0;
       }
+      #error {
+        position: absolute;
+        background-color: #e74c3c;
+        top: 50px;
+        left: 10vw;
+        height: 50px;
+        width: calc(80vw - 40px);
+        border-radius: 15px;
+        color: white;
+        padding: 20px;
+        transition: top 0.5s;
+      }
       #container {
         display: flex;
         justify-content: center;
@@ -68,6 +80,11 @@
   <body>
     <div id="overlay" class="fill-parent">
     </div>
+    {% if invalid %}
+      <div id="error" class="fill-parent">
+        <p>User authentication failed.{% if credentialError %} Email not found. {% else %} Please login to continue. {% endif %}</p>
+      </div>
+    {% endif %}
     <div id="container" class="fill-parent">
       <div id="content">
         <div id="heading">CarPool</div>
@@ -84,6 +101,13 @@
       </div>
     </div>
     <script>
+      main();
+      function main() {
+        setTimeout(() => {
+          error = document.getElementById("error");
+          error.style.top = '-100px';
+        }, 4000);
+      }
     </script>
   </body>
 </html>

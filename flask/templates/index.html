@@ -204,10 +204,10 @@
       <div class="routing-field">
         <div class="mui-container-fluid">
           <div class="mui-row">
-            <div class="center-content mui-col-md-1" style="height:32px">
+            <div class="center-content mui-col-xs-1" style="height:32px;padding:0">
               <div class="circle green"></div>
             </div>
-            <div class="mui-col-md-11">
+            <div class="mui-col-xs-10">
               <div class="clear-margin mui-textfield">
                 <input id="origin" name="origin" type="text" placeholder="Pick Up Address" value="{{origin}}">
               </div>
@@ -218,10 +218,10 @@
       <div class="routing-field">
         <div class="mui-container-fluid">
           <div class="mui-row">
-            <div class="center-content mui-col-md-1" style="height:32px">
+            <div class="center-content mui-col-xs-1" style="height:32px;padding:0">
               <div class="circle red"></div>
             </div>
-            <div class="mui-col-md-11">
+            <div class="mui-col-xs-10">
               <div class="clear-margin mui-textfield">
                 <input id="destination" name="destination" type="text" placeholder="Destination Address" value="{{destination}}">
               </div>
@@ -241,39 +241,38 @@
           <br/>
           <div class="mui-container-fluid">
             <div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+              <div class="auto-width center-content mui-col-xs-1" style="height:24px">
                 <div class="circle green"></div>
               </div>
-              <div class="auto-width mui-col-md-11">
+              <div class="auto-width mui-col-xs-11">
                 <span class="location-info mui--text-body1">From : {{ride.origin}}</span>
               </div>
             </div>
             <br/>
             <div class="mui-row">
-                <div class="auto-width center-content mui-col-md-1" style="height:24px">
+                <div class="auto-width center-content mui-col-xs-1" style="height:24px">
                   <div class="circle red"></div>
                 </div>
-                <div class="auto-width mui-col-md-11">
+                <div class="auto-width mui-col-xs-11">
                   <span class="location-info mui--text-body1">To : {{ride.destination}}</span>
                 </div>
               </div>
               <br/>
 			<div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+              <div class="auto-width center-content mui-col-xs-1" style="height:24px">
                 <div class="circle"></div>
               </div>
-              <div class="auto-width mui-col-md-11">
+              <div class="auto-width mui-col-xs-11">
                 <span class="location-info mui--text-body1">{{ride.start_time}}</span>
               </div>
             </div>
 			<br/>
 
 			<div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                <div class="circle"></div>
-              </div>
-              <div class="auto-width mui-col-md-11">
-                <span class="location-info mui--text-body1">Current Pax : {{ride.current_pax}}</span>
+              <div class="auto-width mui-col-xs-11">
+                {% for i in range(0, ride.current_pax) %}
+                  <i class="icon material-icons">person</i>
+                {% endfor %}
               </div>
             </div>
 			<br/>

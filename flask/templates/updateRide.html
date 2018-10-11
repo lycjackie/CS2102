@@ -89,10 +89,6 @@
         background-color: #f03434;
       }
 
-      .mui-textfield>input, .mui-textfield>textarea {
-        border-bottom-width: 0px;
-      }
-
       .mui-textfield {
         padding: 0px;
       }
@@ -105,10 +101,10 @@
           <br/>
           <div class="mui-container-fluid">
             <div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+              <div class="auto-width center-content mui-col-xs-1" style="height:24px">
                 <div class="circle green"></div>
               </div>
-              <div class="auto-width mui-col-md-11">
+              <div class="auto-width mui-col-xs-11">
                 <span class="time-info mui--text-body2">Origin</span>
                 <div class="mui-textfield">
                   <input type="text" name="origin" value="{{rides.origin}}">
@@ -116,11 +112,22 @@
               </div>
             </div>
             <br/>
-			
-			<div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
+
+
+            <div class="mui-row">
+              <div class="auto-width center-content mui-col-xs-1" style="height:24px">
                 <div class="circle red"></div>
               </div>
+              <div class="auto-width mui-col-xs-11">
+                <span class="time-info mui--text-body2">Destination</span>
+                <div class="mui-textfield">
+                  <input type="text" name="destination" value="{{rides.destination}}">
+                </div>
+              </div>
+            </div>
+			<br/>
+
+			<div class="mui-row">
               <div class="auto-width mui-col-md-11">
                 <span class="time-info mui--text-body2">Time</span>
                 <div class="mui-textfield">
@@ -129,21 +136,7 @@
               </div>
             </div>
 			<br/>
-			
-			
-            <div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                <div class="circle red"></div>
-              </div>
-              <div class="auto-width mui-col-md-11">
-                <span class="time-info mui--text-body2">Destination</span>
-                <div class="mui-textfield">
-                  <input type="text" name="destination" value="{{rides.destination}}">
-                </div>
-              </div>
-            </div>
-			<br/>
-			
+
 			<div class="mui-row">
               <div class="auto-width mui-col-md-11">
                 <span class="time-info mui--text-body2">Status</span>
@@ -155,10 +148,10 @@
                 </div>
               </div>
             </div>
-			
+
           </div>
-          <button type="submit" class="mui-btn mui-btn--raised">Update</button>
-		  <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
+          <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Update</button>
+	        <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
         </div>
       </form>
     </div>

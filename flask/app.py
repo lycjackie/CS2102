@@ -31,7 +31,7 @@ def main():
 
     'Check if logged in'
     if session.get('logged_in') is None:
-        return redirect('/login')
+        return redirect('/login?invalid=true')
 
     origin = ""
     destination = ""
@@ -47,7 +47,7 @@ def main():
 
 @app.route('/login')
 def renderLogin():
-    return render_template('login.html')
+    return render_template('login.html', invalid=request.args.get('invalid'), credentialError=request.args.get('credentialError'))
 
 
 @app.route('/login', methods=['POST'])
@@ -61,7 +61,7 @@ def login():
         session['email'] = email
         return redirect('/')
     else:
-        return redirect('/login?invalid=true')
+        return redirect('/login?invalid=true&credentialError=true')
 
 
 @app.route('/signup')

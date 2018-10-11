@@ -48,18 +48,17 @@
 
       .route-option {
         position: relative;
-        padding: 30px 15px;
         border-bottom: 1px solid rgba(0, 0, 0, 0.26);
       }
 
       .edit-btn {
         position: absolute;
-        top: 30px;
+        top: 10px;
         right: 15px;
       }
       .approve-btn {
         position: absolute;
-        top: 60px;
+        top: 40px;
         right: 15px;
       }
       .approve-btn > .icon {
@@ -103,8 +102,11 @@
 
       .location-info {
         font-size: 20px;
-        padding-left: 20px;
         font-weight: lighter;
+      }
+
+      .price {
+        font-size: 24px;
       }
 
       .clear-margin {
@@ -148,7 +150,7 @@
       }
 
       .home-btn > .icon {
-        font-size: 4em;
+        font-size: 3em;
         color: #fe000a;
       }
 
@@ -192,6 +194,10 @@
         height: 100%;
         width: 100%;
       }
+
+      .pax {
+        padding-left: 10px;
+      }
     </style>
   </head>
   <body>
@@ -203,33 +209,20 @@
       </div>
       {% for bid in bids %}
         <div class="route-option">
-          <div class="padding-with-circle mui--text-title">Bidder : {{ bid.bidder_name }} </div>
+          <div class="padding-with-circle mui--text-title"></div>
           <br/>
           <div class="mui-container-fluid">
-              <div class="mui-row">
-                  <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                      <div class="circle red"></div>
-                  </div>
-                  <div class="auto-width mui-col-md-11">
-                      <span class="time-info mui--text-body2">Total Passenger</span>
-                      <div class="mui-textfield">
-                          <span class=" mui--text-body1"> {{bid.no_pax}}</span>
-                      </div>
-                  </div>
+            <div class="mui-row">
+              <div class="auto-width mui-col-md-11">
+                <p>
+                  <span class="price mui--text-body1">{{bid.bid_price}}</span>
+                </p>
+                {% for i in range(0, bid.no_pax) %}
+                  <i class="icon material-icons">person</i>
+                {% endfor %}
               </div>
-              <br />
-              <div class="mui-row">
-                      <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                          <div class="circle red"></div>
-                      </div>
-                      <div class="auto-width mui-col-md-11">
-                          <span class="time-info mui--text-body2">Total Bid Price</span>
-                          <div class="mui-textfield">
-                              <span class=" mui--text-body1">${{bid.bid_price}}</span>
-                          </div>
-                      </div>
-                  </div>
-              <br />
+            </div>
+            <br/>
 
             <button class="approve-btn" onclick="location.href = '/approveBid?regno={{ bid.reg_no }}&starttime={{ bid.start_time }}&email={{ bid.bidder }}'">
               <i class="icon material-icons">beenhere</i>
@@ -281,6 +274,14 @@
             }
           }
         })
+
+        prices = document.getElementsByClassName("price");
+        for(i = 0; i < prices.length; i++){
+          price = prices[i].innerHTML;
+          price = parseFloat(price);
+          price = price.toFixed(2);
+          prices[i].innerHTML = "$" + price;
+        }
       }
     </script>
   </body>

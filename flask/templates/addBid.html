@@ -49,6 +49,18 @@
       .mui-textfield {
         padding: 0px;
       }
+
+      .details {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        padding: 10px 30px;
+        background-color: #e9e9e9;
+      }
+
+      #trip {
+        border-left: 1px solid #333;
+        padding: 20px 0px 20px 10px;
+      }
     </style>
 </head>
 
@@ -63,24 +75,17 @@
   <div class="mui-container-fluid">
     <div class="mui-row">
       <div class="mui-col-md-2">
-        <div class="mui-container-fluid">
-          <span class="numberplate-info mui--text-body2">Trip Detail</span>
-          <br/> <br/>
+        <div class="details mui-container-fluid">
           <div class="mui-row">
-            From : {{ ride.origin }}
+            {{ ride.origin }}
           </div>
-          <br/>
-          <div class="mui-row">
-            To : {{ ride.destination }}
+          <div id="trip">
+            {{ ride.reg_no }}
+            <br/>
+            {{ ride.start_time }}
           </div>
-          <br/>
           <div class="mui-row">
-            On : {{ ride.start_time }} 
-          </div>
-          <!-- Maybe some Car details??-->
-          <br/>
-          <div class="mui-row">
-            Vehicle Number: {{ ride.reg_no }}
+            {{ ride.destination }}
           </div>
       </div>
     </div>
@@ -113,9 +118,11 @@
           </div>
           {% if update %}
           <input type="hidden" name="update" value= '1' />
-          <button type="submit" class="mui-btn mui-btn--raised">Update</button>
+          <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Update</button>
+	        <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
           {% else %}
-          <button type="submit" class="mui-btn mui-btn--raised">Bid</button>
+          <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Bid</button>
+	        <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
           {% endif %}
         </form>
       </div>

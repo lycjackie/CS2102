@@ -30,13 +30,12 @@
 
       .route-option {
         position: relative;
-        padding: 30px 15px;
         border-bottom: 1px solid rgba(0, 0, 0, 0.26);
       }
 
       .edit-btn {
         position: absolute;
-        top: 30px;
+        top: 15px;
         right: 15px;
       }
 
@@ -77,7 +76,6 @@
 
       .car-info {
         font-size: 20px;
-        padding-left: 20px;
         font-weight: lighter;
       }
 
@@ -172,12 +170,12 @@
           <br/>
           <div class="mui-container-fluid">
             <div class="mui-row">
-              <div class="auto-width center-content mui-col-md-1" style="height:24px">
-                <div class="circle green"></div>
-              </div>
               <div class="auto-width mui-col-md-11">
-                <span class="numberplate-info mui--text-body2">{{ car.reg_no }}</span>
-                <span class="car-info mui--text-body1">{{ car.make }} {{ car.model }} - {{ car.colour }} ({{ car.capacity }}-seater)</span>
+                <p>
+                  <span class="numberplate-info mui--text-body2">{{ car.reg_no }}</span>
+                  <br/>
+                  <span class="car-info mui--text-body1">{{ car.make }} {{ car.model }} - {{ car.colour }} ({{ car.capacity }}-seater)</span>
+                </p>
               </div>
             </div>
             <br/>
