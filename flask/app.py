@@ -439,7 +439,7 @@ def add_user_bid():
                 'email': session.get('email')
             }
             res = ride_bid.add_bid(ride_detail)
-            if res == 0:
+            if res is None:
 				print 'test'
 				rides = ride.retrieveRide(ride_detail)
 				return render_template('addBid.html',ride=rides,fail='1')

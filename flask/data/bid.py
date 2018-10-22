@@ -28,7 +28,7 @@ def add_bid(bid_detail):
 	db.commit()
 	cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
-        print "Got Error:"
+        print "Got Error:",res
         print error
         return res
     finally:
