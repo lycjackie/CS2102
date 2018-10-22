@@ -48,7 +48,7 @@ BEGIN
       THEN
       RETURN NEW;
   ELSE
-  RETURN NULL;
+  RAISE EXCEPTION 'Exceeded maximum capacity, please reduce your number of passenger';
      END IF;
 END
 $func$  LANGUAGE plpgsql;
