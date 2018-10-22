@@ -293,35 +293,40 @@ def renderAddBid():
 	    'bid_price': 13.37,
 		'email':'owerv@tamu.edu'
 	}
-'''
+
 
 
 @app.route("/addBid", methods=['POST'])
 def addBid():
-    if session.get('email') is None or session.get('logged_in') is None:
-        return redirect('/login')
-    else:
-        price = request.form['price']
-        # ride_detail = request.form['ride_detail'].split('/')
-        no_pax = request.form['no_pax']
-        start_time = dt.datetime.strptime(
-            request.form['start_time'], '%Y-%m-%d %H:%M:%S')
-        print start_time
-        reg_no = request.form['reg_no']
-        ride_details = {
-            'reg_no': reg_no,
-            'start_time': start_time,
-            'no_pax': no_pax,
-            'bid_price': price,
-            'email': session.get('email')
-        }
-        print ride_details
-        res = ride_bid.add_bid(ride_details)
-        if res is not None:
-            return redirect('/addBid')
-        else:
-            return redirect('/')
-
+	if session.get('email') is None or session.get('logged_in') is None:
+		return redirect('/login')
+	else:
+		price = request.form['price']
+		# ride_detail = request.form['ride_detail'].split('/')
+		no_pax = request.form['no_pax']
+		start_time = dt.datetime.strptime(
+		request.form['start_time'], '%Y-%m-%d %H:%M:%S')
+		print start_time
+		reg_no = request.form['reg_no']
+		ride_details = {
+		'reg_no': reg_no,
+		'start_time': start_time,
+		'no_pax': no_pax,
+		'bid_price': price,
+		'email': session.get('email')
+		}
+		try:
+			print ride_details
+			res = ride_bid.add_bid(ride_details)
+			if res == 0:
+				print 'test'
+				rides = ride_bid.getSingleBid(session.get('email'),reg_no,start_time)
+				return redirect('/bid',reg_no=reg_no,start_time=start_time)
+			else:
+				return redirect('/login')
+		except Exception as error:
+			print error
+'''
 
 @app.route('/listBid')
 def renderListBid():
@@ -406,7 +411,8 @@ def renderBidPage():
 			ride_details = {'start_time': start_time, 'reg_no': reg_no}
 			email = session.get('email')
 			checker = ride_bid.success_bid(email,reg_no,start_time)
-			if checker is not None:
+			print checker
+			if checker:
 			    return render_template('addBid.html',invalid='1')
 			rides = ride.retrieveRide(ride_details)
 			return render_template('addBid.html', ride=rides)
@@ -433,11 +439,14 @@ def add_user_bid():
                 'email': session.get('email')
             }
             res = ride_bid.add_bid(ride_detail)
-            if res is None:
-                return redirect('/login')
+            if res == 0:
+				print 'test'
+				rides = ride.retrieveRide(ride_detail)
+				return render_template('addBid.html',ride=rides,fail='1')
             else:
                 return redirect('/')
-        except Exception:
+        except Exception as e:
+            print e
             return redirect('/')
 
 

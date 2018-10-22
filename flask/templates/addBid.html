@@ -75,6 +75,9 @@
         align-items: center;
         justify-content: center;
       }
+	  #fail{
+	  	color:red;
+	  }
     </style>
 </head>
 
@@ -109,7 +112,7 @@
       </div>
     </div>
       <div class="mui-col-md-7">
-      <form method="post">
+      <form method="post" class="mui-form">
           <div class="mui-container-fluid">
             <div class="mui-row">
               <div class="mui-col-md-5">
@@ -135,13 +138,19 @@
             <input type="hidden" name="start_time" value='{{ ride.start_time }}' />
 
           </div>
+		  {% if fail %}
+			<div id="fail">
+			  <p>Please reduce your number of passenger</p>
+			</div>
+			{% else %}
+		  {% endif %}
           {% if update %}
           <input type="hidden" name="update" value= '1' />
           <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Update</button>
 	        <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
           {% else %}
           <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Bid</button>
-	        <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
+          <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
 
           {% endif %}
         </form>

@@ -16,19 +16,21 @@ create table ride_bid
 '''
 def add_bid(bid_detail):
     sql = """
-    INSERT INTO ride_bid (email,start_time,reg_no,no_pax,bid_price) VALUES (%s,%s,%s,%s,%s) RETURNING status
+    INSERT INTO ride_bid (email,start_time,reg_no,no_pax,bid_price) VALUES (%s,%s,%s,%s,%s)
     """
     db = connect()
     res = None
     try:
-        cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-        cur.execute(sql,(bid_detail['email'],bid_detail['start_time'],bid_detail['reg_no'],bid_detail['no_pax'],bid_detail['bid_price']))
-        res = cur.fetchone()[0]
-        db.commit()
-        cur.close()
+	cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+	cur.execute(sql,(bid_detail['email'],bid_detail['start_time'],bid_detail['reg_no'],bid_detail['no_pax'],bid_detail['bid_price']))
+	res = cur.rowcount
+	print 'row count ' + str(res)
+	db.commit()
+	cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print "Got Error:"
         print error
+        return res
     finally:
         if db is not None:
             db.close()
