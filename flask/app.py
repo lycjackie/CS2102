@@ -39,7 +39,7 @@ def main():
 		origin = request.args.get('origin')
     if request.args.get('destination') is not None:
 		destination = request.args.get('destination')
-    list = ride.searchRides(origin, destination)
+    list = ride.searchRides(origin, destination, session.get('email'))
     print list
 
     return render_template('index.html', email=session.get('email'), rides=list, origin=origin, destination=destination)
@@ -152,7 +152,7 @@ def addRide():
 	else:
 		origin = ""
 		destination = ""
-		list = ride.searchRides(origin, destination)
+		list = ride.searchRides(origin, destination, session.get('email'))
         #return render_template('index.html', email=session.get('email'), rides=list, origin=origin, destination=destination)
         return redirect('/')
 
@@ -184,7 +184,7 @@ def updateRide():
 	else:
 		origin = ""
 		destination = ""
-		list = ride.searchRides(origin, destination)
+		list = ride.searchRides(origin, destination, session.get('email'))
 		return render_template('index.html', email=session.get('email'), rides=list, origin=origin, destination=destination)
 
 

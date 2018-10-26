@@ -116,9 +116,12 @@ def updateRide(status, newOrigin, newDestination, reg_no, start_time):
             db.close()
     return
 
-def searchRides(origin, destination):
+def searchRides(origin, destination, email):
     sql = """
-    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.current_pax
+
+    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.current_pax,
+   	EXISTS (SELECT c1.email FROM car c1 WHERE c1.reg_no = c.reg_no AND c1.email = %s) as is_driver,
+   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s) as has_success_bid
     FROM ride r, "user" u, car c
     WHERE r.reg_no = c.reg_no
     and c.email = u.email
@@ -130,7 +133,7 @@ def searchRides(origin, destination):
     res = None
     try:
         cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-        cur.execute(sql,('%' + origin + '%', '%' + destination + '%'),)
+        cur.execute(sql,(email, email, '%' + origin + '%', '%' + destination + '%'),)
         res = cur.fetchall()
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
