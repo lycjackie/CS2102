@@ -1,5 +1,6 @@
 # CS2102 Assignment
-Yay
+
+Instruction Guide
 
 ## Setting up
 
@@ -20,11 +21,15 @@ URL  :  cs2107.jackielyc.me
 Port :  5432
 Database : cs2102_project
 ```
-
 Use any GUI tools or cmd prompt to connect.
-
 ```
 psql -h cs2107.jackielyc.me -U cs2102_admin --dbname=cs2102_project
+```
+
+## Alternatively using your own localhost PostgreSQL
+psql cs2102_project < Design/init.sql
+```
+
 ```
 
 ## Flask app
@@ -33,4 +38,6 @@ psql -h cs2107.jackielyc.me -U cs2102_admin --dbname=cs2102_project
 
 ```
 python app.py
+or
+flask run
 ```

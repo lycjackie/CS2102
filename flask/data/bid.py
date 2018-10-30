@@ -30,7 +30,7 @@ def add_bid(bid_detail):
     except (Exception, psycopg2.DatabaseError) as error:
         print "Got Error:",res
         print error
-        return res
+        return str(error)
     finally:
         if db is not None:
             db.close()
