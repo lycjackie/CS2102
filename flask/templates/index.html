@@ -307,10 +307,11 @@
           {% if ride.has_success_bid %}
             <span class="bid-btn success">Successful bid</span>
           {% elif ride.has_pending_bid %}
-            <span class="bid-btn pending">Pending bid</span>
+            <span class="bid-btn pending">Pending bid
             <button class="edit-btn" onclick="location.href = '/updateBid?regno={{ ride.reg_no }}&starttime={{ ride.start_time }}&email={{ session['email'] }}'">
               <i class="icon material-icons">edit</i>
             </button>
+            </span>
           {% elif ride.has_unsuccessful_bid %}
             <span class="bid-btn failed">Unsuccessful bid</span>
           {% else %}
