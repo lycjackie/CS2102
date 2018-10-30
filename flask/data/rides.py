@@ -121,9 +121,9 @@ def searchRides(origin, destination, email):
 
     SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.current_pax,
    	EXISTS (SELECT c1.email FROM car c1 WHERE c1.reg_no = c.reg_no AND c1.email = %s) as is_driver,
-   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'successful') as has_success_bid,
-   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'unsuccessful') as has_unsuccessful_bid,
-   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'pending') as has_pending_bid
+   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'successful' AND rb.start_time = r.start_time) as has_success_bid,
+   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'unsuccessful' AND rb.start_time = r.start_time) as has_unsuccessful_bid,
+   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'pending' AND rb.start_time = r.start_time) as has_pending_bid
     FROM ride r, "user" u, car c
     WHERE r.reg_no = c.reg_no
     and c.email = u.email
