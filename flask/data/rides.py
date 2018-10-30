@@ -118,17 +118,18 @@ def updateRide(status, newOrigin, newDestination, reg_no, start_time):
 
 def searchRides(origin, destination, email):
     sql = """
-
-    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.current_pax,
+    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.current_pax, (m.capacity - r.current_pax) as pax_left,
    	EXISTS (SELECT c1.email FROM car c1 WHERE c1.reg_no = c.reg_no AND c1.email = %s) as is_driver,
    	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'successful' AND rb.start_time = r.start_time) as has_success_bid,
    	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'unsuccessful' AND rb.start_time = r.start_time) as has_unsuccessful_bid,
    	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'pending' AND rb.start_time = r.start_time) as has_pending_bid
-    FROM ride r, "user" u, car c
+    FROM ride r, "user" u, car c,model m
     WHERE r.reg_no = c.reg_no
     and c.email = u.email
     and LOWER(r.origin) LIKE LOWER(%s) and LOWER(r.destination) like LOWER(%s)
 	and r.status = 'in progress'
+	and c.make = m.make
+	and c.model = m.model
     ORDER BY r.start_time ASC
      """
     db = connect()

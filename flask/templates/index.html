@@ -304,21 +304,23 @@
               <i class="icon material-icons">view_list</i>
             </button>
           {% endif %}
-          {% if ride.has_success_bid %}
-            <span class="bid-btn success">Successful bid</span>
-          {% elif ride.has_pending_bid %}
-            <span class="bid-btn pending">Pending bid
-            <button class="edit-btn" onclick="location.href = '/updateBid?regno={{ ride.reg_no }}&starttime={{ ride.start_time }}&email={{ session['email'] }}'">
-              <i class="icon material-icons">edit</i>
-            </button>
-            </span>
-          {% elif ride.has_unsuccessful_bid %}
-            <span class="bid-btn failed">Unsuccessful bid</span>
-          {% else %}
-            <button class="bid-btn" onclick="location.href = '/bid?regno={{ ride.reg_no }}&starttime={{ ride.start_time }}'">
-              <i class="icon material-icons">how_to_vote</i>
-            </button>
-          {% endif %}
+		  {% if ride.pax_left > 0 %}
+			  {% if ride.has_success_bid %}
+	            <span class="bid-btn success">Successful bid</span>
+	          {% elif ride.has_pending_bid %}
+	            <span class="bid-btn pending">Pending bid
+	            <button class="edit-btn" onclick="location.href = '/updateBid?regno={{ ride.reg_no }}&starttime={{ ride.start_time }}&email={{ session['email'] }}'">
+	              <i class="icon material-icons">edit</i>
+	            </button>
+	            </span>
+	          {% elif ride.has_unsuccessful_bid %}
+	            <span class="bid-btn failed">Unsuccessful bid</span>
+	          {% else %}
+	            <button class="bid-btn" onclick="location.href = '/bid?regno={{ ride.reg_no }}&starttime={{ ride.start_time }}'">
+	              <i class="icon material-icons">how_to_vote</i>
+	            </button>
+	          {% endif %}
+		  {% endif %}
           </div>
         </div>
 	   {% endfor %}
