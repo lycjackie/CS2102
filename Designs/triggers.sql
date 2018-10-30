@@ -60,3 +60,27 @@ $func$  LANGUAGE plpgsql;
   ON ride_bid
   FOR EACH ROW
   EXECUTE PROCEDURE capacity_checker();
+  
+  
+create or replace function audit() returns trigger
+	language plpgsql
+as $$
+BEGIN
+  IF NEW.status = 'completed' THEN
+  INSERT INTO audit_log(start_time,end_time,status,current_pax,destination,origin,reg_no)
+  VALUES (OLD.start_time,now(),NEW.status,OLD.current_pax,OLD.destination,OLD.origin,OLD.reg_no);
+--   DELETE FROM ride WHERE origin=OLD.origin AND reg_no=OLD.reg_no;
+  END IF;
+
+  RETURN NEW;
+END;
+$$
+;
+
+create trigger to_audit
+	before update
+	on ride
+	for each row
+	execute procedure audit()
+;
+
