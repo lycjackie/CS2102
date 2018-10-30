@@ -121,7 +121,9 @@ def searchRides(origin, destination, email):
 
     SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.current_pax,
    	EXISTS (SELECT c1.email FROM car c1 WHERE c1.reg_no = c.reg_no AND c1.email = %s) as is_driver,
-   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s) as has_success_bid
+   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'successful') as has_success_bid,
+   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'unsuccessful') as has_unsuccessful_bid,
+   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s AND rb.status = 'pending') as has_pending_bid
     FROM ride r, "user" u, car c
     WHERE r.reg_no = c.reg_no
     and c.email = u.email
@@ -133,7 +135,7 @@ def searchRides(origin, destination, email):
     res = None
     try:
         cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-        cur.execute(sql,(email, email, '%' + origin + '%', '%' + destination + '%'),)
+        cur.execute(sql,(email, email, email, email, '%' + origin + '%', '%' + destination + '%'),)
         res = cur.fetchall()
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
