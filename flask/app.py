@@ -336,7 +336,7 @@ def renderListBid():
     if session.get('logged_in') is None or session.get('email') is None:
         return redirect('/login')
     else:
-        rides = rides = ride_bid.get_bid(session.get('email'))
+        rides = ride_bid.get_bid(session.get('email'))
         print rides
         return render_template('listBid.html', rides=rides)
 
