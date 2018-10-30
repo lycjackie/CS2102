@@ -74,6 +74,7 @@ flask run
 |       |-- listBid.html
 |       |-- listCar.html
 |       |-- login.html
+|       |-- pastRide.html
 |       |-- signup.html
 |       |-- updateCar.html
 |       |-- updateRide.html

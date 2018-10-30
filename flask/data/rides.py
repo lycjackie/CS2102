@@ -145,6 +145,32 @@ def searchRides(origin, destination, email):
         if db is not None:
             db.close()
     return res
+	
+def pastRides(email):
+    sql = """
+
+    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.end_time, r.current_pax,
+   	EXISTS (SELECT c1.email FROM car c1 WHERE c1.reg_no = c.reg_no AND c1.email = %s) as is_driver,
+   	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s) as has_success_bid
+    FROM audit_log r, "user" u, car c
+    WHERE r.reg_no = c.reg_no
+    and c.email = u.email
+	and r.status = 'completed'
+    ORDER BY r.end_time DESC
+     """
+    db = connect()
+    res = None
+    try:
+        cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+        cur.execute(sql,(email, email))
+        res = cur.fetchall()
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print error
+    finally:
+        if db is not None:
+            db.close()
+    return res	
 
 if __name__ == '__main__':
     '''

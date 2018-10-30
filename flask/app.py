@@ -132,6 +132,17 @@ def renderAddRide():
 			return render_template('addRide.html', users=users, cars=cars)
         except ValueError:
             return redirect('/')
+			
+@app.route('/pastRide')
+def renderPastRides():
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        try:
+			rides = ride.pastRides(session.get('email'))
+			return render_template('pastRide.html', rides=rides)
+        except ValueError:
+            return redirect('/')			
 
 
 @app.route("/addRide", methods=['POST'])
