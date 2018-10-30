@@ -41,3 +41,42 @@ python app.py
 or
 flask run
 ```
+
+
+## Directory
+```bash
+|-- Designs
+|   |-- ddl.sql
+|   |-- er_diagram.pdf
+|   |-- ER.png
+|   |-- ER.sql
+|   |-- insert_user.sql
+|   `-- triggers.sql
+|-- flask
+|   |-- app.py
+|   |-- data
+|   |   |-- bid.py
+|   |   |-- cars.py
+|   |   |-- dbconfig.py
+|   |   |-- __init__.py
+|   |   |-- models.py
+|   |   |-- rides.py
+|   |   `-- users.py
+|   |-- requirements.txt
+|   |-- static
+|   |   `-- login-bg.jpg
+|   `-- templates
+|       |-- addBid.html
+|       |-- addCar.html
+|       |-- addRide.html
+|       |-- approveBid.html
+|       |-- index.html
+|       |-- listBid.html
+|       |-- listCar.html
+|       |-- login.html
+|       |-- signup.html
+|       |-- updateCar.html
+|       |-- updateRide.html
+|       `-- updateUser.htm
+|-- README.md
+```
