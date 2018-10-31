@@ -54,7 +54,9 @@ def renderLogin():
 def login():
     email = request.form['email']
     password = request.form['password']
-    u = user.retrieveUser({'email': email,'password': hash(password)})
+    
+    u = user.retrieveUser({'email': email,'password': password})
+    print u
     if len(u) > 0:
         session['logged_in'] = u
         session['email'] = email
@@ -80,7 +82,7 @@ def signup():
         'firstName': firstName,
         'lastName': lastName,
         'contact': contact,
-        'password': hash(password)
+        'password': password
     })
     if u:
         return redirect('/login')

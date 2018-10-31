@@ -1,5 +1,6 @@
 import psycopg2
 from dbconfig import connect
+import hashlib
 
 '''
 create table "user"
@@ -17,8 +18,8 @@ def addUser(user):
     db = connect()
     try:
         cur = db.cursor()
-
-        cur.execute(sql, (user['email'],user['contact'],user['firstName'],user['lastName'],user['password']))
+        password = hash_it(user['password'])
+        cur.execute(sql, (user['email'],user['contact'],user['firstName'],user['lastName'],password))
 
         s = cur.fetchone()[0]
         ## Insert the role
@@ -60,12 +61,13 @@ def updateUser(email, first_name, last_name):
 
 
 def retrieveUser(user):
-    sql = "SELECT * FROM \"user\" Where \"email\" = %s AND \"password\" = \'%s\';"
+    sql = "SELECT * FROM \"user\" Where \"email\" = %s AND \"password\" = %s;"
     res = []
     db = connect()
     try:
         cur = db.cursor()
-        no_rows = cur.execute(sql,(user['email'],user['password'])) # need 1 comma behind if only using 1 parameter.
+        password = hash_it(user['password'])
+        no_rows = cur.execute(sql,(user['email'],password)) # need 1 comma behind if only using 1 parameter.
 
         while True: # loop cursor and retrieve results
 			row = cur.fetchone() # should only return 1 result
@@ -82,6 +84,10 @@ def retrieveUser(user):
 
     return res
 
+def hash_it(password):
+    m = hashlib.sha256()
+    m.update(password)
+    return m.hexdigest()
 
 if __name__ == '__main__':
     test_user = {
