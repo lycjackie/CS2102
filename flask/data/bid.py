@@ -125,7 +125,8 @@ def get_AllBidForSingleRide(reg_no,start_time):
 	INNER JOIN \"user\" u on rb.email = u.email
 	where rb.reg_no = %s
 	and rb.start_time = %s
-	and rb.status = 'pending'
+	and (rb.status = 'pending' OR rb.status = 'successful')
+	ORDER BY  rb.status DESC ,rb.bid_price DESC
 	"""
 	db = connect()
 	res = None

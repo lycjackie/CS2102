@@ -198,6 +198,9 @@
       .pax {
         padding-left: 10px;
       }
+      .success {
+        color: #2ecc71;
+      }
     </style>
   </head>
   <body>
@@ -218,17 +221,24 @@
                   <span class="price mui--text-body1">{{bid.bid_price}}</span>
                 </p>
                 {% for i in range(0, bid.no_pax) %}
+                  {% if bid.status == "successful" %}
+                  <i class="icon material-icons success">person</i>
+                  {% else %}
                   <i class="icon material-icons">person</i>
+                  {% endif %}
                 {% endfor %}
                 <br/>
                 <span>{{bid.bidder_name}}</span>
               </div>
             </div>
             <br/>
-
+            {% if bid.status != "successful" %}
             <button class="approve-btn" onclick="location.href = '/approveBid?regno={{ bid.reg_no }}&starttime={{ bid.start_time }}&email={{ bid.bidder }}'">
               <i class="icon material-icons">beenhere</i>
             </button>
+            {% else %}
+            <span class="bid-btn success">Successful bid</span>
+            {% endif %}
           </div>
         </div>
 	   {% endfor %}
