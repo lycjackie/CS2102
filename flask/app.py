@@ -20,15 +20,6 @@ ride_bid = importlib.import_module("data.bid")
 
 @app.route('/')
 def main():
-    '''
-    test_user = {
-        'name':'jackie',
-        'nric':'123456',
-        'contact': 99112233,
-        'role': 3
-    }
-    '''
-
     'Check if logged in'
     if session.get('logged_in') is None:
         return redirect('/login?invalid=true')
@@ -277,72 +268,6 @@ def updateCar():
             reg_no, make_model[0], make_model[1], colour)
         return redirect('/listCar')
 
-
-'''
-@app.route("/addBid")
-def renderAddBid():
-    if session.get('logged_in') is None:
-        return redirect('/login')
-    else:
-        # if session.get('reg_no') is None and session.get('start_time') is None:
-        #    return redirect('/') # by right should go back to list ride
-        # else:
-        # ride_detail = {
-        #   'reg_no' : session.get('reg_no'),
-        #   'start_time : dt.datetime.strptime(session.get('start_time'),'%Y-%m-%d %H:%M:%S')
-        # }
-        ride_detail = {
-            'reg_no': 'SGX1337X',
-	        'start_time': dt.datetime.combine(dt.date(2018, 9, 19), dt.time(14, 00))
-        }
-
-        rides = ride.retrieveRide(ride_detail)
-        return render_template('addBid.html', ride=rides)
-
-'''
-'''
-    retrieveRide(ride_detail)
-	test_user = {
-	    'reg_no':'SGX1337X',
-	    'start_time': dt.datetime.combine(dt.date(2018,9,19),dt.time(14,00)),
-	    'no_pax': 1,
-	    'bid_price': 13.37,
-		'email':'owerv@tamu.edu'
-	}
-
-
-
-@app.route("/addBid", methods=['POST'])
-def addBid():
-	if session.get('email') is None or session.get('logged_in') is None:
-		return redirect('/login')
-	else:
-		price = request.form['price']
-		# ride_detail = request.form['ride_detail'].split('/')
-		no_pax = request.form['no_pax']
-		start_time = dt.datetime.strptime(
-		request.form['start_time'], '%Y-%m-%d %H:%M:%S')
-		print start_time
-		reg_no = request.form['reg_no']
-		ride_details = {
-		'reg_no': reg_no,
-		'start_time': start_time,
-		'no_pax': no_pax,
-		'bid_price': price,
-		'email': session.get('email')
-		}
-		try:
-			print ride_details
-			res = ride_bid.add_bid(ride_details)
-			if res == 0:
-				print 'test'
-				rides = ride_bid.getSingleBid(session.get('email'),reg_no,start_time)
-				return redirect('/bid',reg_no=reg_no,start_time=start_time)
-			else:
-				return redirect('/login')
-		except Exception as error:
-			print error
-'''
 
 @app.route('/listBid')
 def renderListBid():

@@ -277,10 +277,47 @@ create trigger cap_check
 
 ### Simple Insert Query
 
-```python
-sql = """
-    INSERT INTO ride_bid (email,start_time,reg_no,no_pax,bid_price) VALUES (%s,%s,%s,%s,%s)
-    """
+```sql
+INSERT INTO ride_bid (email,start_time,reg_no,no_pax,bid_price) VALUES (%s,%s,%s,%s,%s)
+```
+
+
+
+## Ride History
+
+![1541319172214](C:\Users\Jackie\AppData\Roaming\Typora\typora-user-images\1541319172214.png)
+
+### Trigger
+
+```sql
+create or replace function audit() returns trigger
+	language plpgsql
+as $$
+BEGIN
+  IF NEW.status = 'completed' THEN
+  INSERT INTO audit_log(start_time,end_time,status,current_pax,destination,origin,reg_no)
+  VALUES (OLD.start_time,now(),NEW.status,OLD.current_pax,OLD.destination,OLD.origin,OLD.reg_no);
+  END IF;
+
+  RETURN NEW;
+END;
+$$
+;
+
+create trigger to_audit
+	before update
+	on ride
+	for each row
+	execute procedure audit()
+;
+```
+
+### Simple Update Query
+
+```sql
+UPDATE ride
+    SET origin = %s, destination = %s, status = %s
+    WHERE reg_no = %s AND start_time = %s
 ```
 
 
