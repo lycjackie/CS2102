@@ -419,14 +419,14 @@ def approve_bid():
 def renderBidPage():
 	reg_no = request.args.get('regno')
 	start_time = request.args.get('starttime')
-	if reg_no is None:
+	if reg_no is None or session.get('email') is None or start_time is None:
 		return redirect('/')
 	else:
 		try:
 
 			ride_details = {'start_time': start_time, 'reg_no': reg_no}
 			email = session.get('email')
-			checker = ride_bid.success_bid(email,reg_no,start_time)
+			checker = ride_bid.success_bid(email,reg_no,start_time) # Check if the passenger have bid for the ride
 			print checker
 			if checker:
 			    return render_template('addBid.html',invalid='1')

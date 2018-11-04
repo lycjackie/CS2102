@@ -75,9 +75,11 @@ def retrieveAllRide():
 
 def retrieveRide(ride_detail):
     sql = """
-        SELECT u.first_name, r.origin,r.destination,r.status,r.start_time,r.reg_no
-        from ride r, "user" u, car c
+        SELECT u.first_name, r.origin,r.destination,r.status,r.start_time,r.reg_no, (m.capacity - r.current_pax) as pax_left
+        from ride r, "user" u, car c,model m
         WHERE r.reg_no = c.reg_no
+        AND c.model = m.model
+        AND c.make = m.make
         and c.email = u.email
         and r.start_time = %s
         and r.reg_no = %s
