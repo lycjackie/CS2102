@@ -173,7 +173,7 @@ def success_bid(email,reg_no,start_time):
 	WHERE email = %s
 	AND reg_no = %s
 	AND start_time = %s
-	AND status = 'successful'
+	AND status in ('successful','pending')
 	"""
 	db = connect()
 	res = None
