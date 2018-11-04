@@ -1,0 +1,393 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="//cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
+    <style>
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+
+      .fill-parent {
+        height: 100%;
+        width: 100%;
+      }
+
+      body {
+        font-family: "Helvetica Neue",Helvetica,Arial,Verdana,Tahoma
+      }
+
+      button {
+        border-color: transparent;
+        border-style: solid;
+        border-width: 0px;
+        background-color: transparent;
+        padding: 0;
+      }
+
+      .routing-form {
+        background-color: #d1d1d1;
+        padding: 20px;
+        position: fixed;
+        z-index: 100;
+        width: calc(100vw - 40px);
+      }
+
+      .content {
+        padding-top: 145px;
+      }
+
+      .routing-field {
+        background-color: #f9f9f9;
+        padding: 10px;
+      }
+
+      .routing-field:first-child {
+        border-radius: 5px 5px 0px 0px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+      }
+
+      .routing-field:last-child {
+        border-radius: 0px 0px 5px 5px;
+      }
+
+      .routing-heading {
+        background-color: #f1f1f1;
+        padding: 20px;
+      }
+
+      .route-option {
+        position: relative;
+        padding: 30px 15px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+      }
+
+      .edit-btn {
+        position: absolute;
+        top: 30px;
+        right: 15px;
+      }
+      .approve-btn {
+        position: absolute;
+        top: 60px;
+        right: 15px;
+      }
+      .approve-btn > .icon {
+        color: #36d7b7
+      }
+      .bid-btn {
+        position: absolute;
+        top: 90px;
+        right: 15px;
+      }
+      .bid-btn > .icon {
+        color:#19b5fe
+      }
+
+      #overlay {
+        background-color: rgba(0, 0, 0, 0.4);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 200;
+      }
+
+      #toolbar {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #toolbar {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        flex-direction: column;
+        z-index: 201;
+      }
+
+      #toolbar > button {
+          background-color: white;
+          border-radius: 50px;
+          width: 56px;
+          height: 56px;
+          box-shadow: 0 0 10px #999;
+          justify-content: center;
+          align-items: center;
+      }
+
+      .create-btn > .icon {
+        font-size: 3em;
+        color: #19b5fe;
+      }
+
+      .car-btn > .icon {
+        font-size: 3em;
+        color: #fe000a;
+      }
+
+      .person-btn > .icon {
+        font-size: 3em;
+      }
+
+      .exit-btn > .icon {
+        font-size: 3em;
+      }
+
+      .menu-btn > .icon {
+        font-size: 2em;
+      }
+
+      .time-info {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .location-info {
+        font-size: 20px;
+        padding-left: 20px;
+        font-weight: lighter;
+      }
+
+      .clear-margin {
+        margin: 0px;
+      }
+
+      .center-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .auto-width {
+        width: auto;
+      }
+
+      .circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 100px;
+      }
+
+      .padding-with-circle {
+        padding-left: 15px;
+      }
+
+      .circle.green {
+        background-color: #36d7b7;
+      }
+
+      .circle.red {
+        background-color: #f03434;
+      }
+
+      .icon {
+        color: #a1a1a1;
+      }
+
+      .mui-textfield>input, .mui-textfield>textarea {
+        border-bottom-width: 0px;
+      }
+
+      .mui-textfield {
+        padding: 0px;
+      }
+
+      .success {
+        color: #2ecc71;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="overlay" class="fill-parent menu-item">
+    </div>
+    <form class="routing-form">
+      <div class="routing-field">
+        <div class="mui-container-fluid">
+          <div class="mui-row">
+            <div class="center-content mui-col-xs-1" style="height:32px;padding:0">
+              <div class="circle green"></div>
+            </div>
+            <div class="mui-col-xs-10">
+              <div class="clear-margin mui-textfield">
+                <input id="origin" name="origin" type="text" placeholder="Pick Up Address" value="{{origin}}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="routing-field">
+        <div class="mui-container-fluid">
+          <div class="mui-row">
+            <div class="center-content mui-col-xs-1" style="height:32px;padding:0">
+              <div class="circle red"></div>
+            </div>
+            <div class="mui-col-xs-10">
+              <div class="clear-margin mui-textfield">
+                <input id="destination" name="destination" type="text" placeholder="Destination Address" value="{{destination}}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="submit" style="display:none" type="submit"></button>
+    </form>
+    <div class="content">
+      <div class="routing-heading">
+        <div class="mui--text-subhead">Past Rides</div>
+      </div>
+	  
+	  
+        {% if rides %}
+           {% for ride in rides %}
+			<div class="route-option">
+			 
+			  <div class="mui-container-fluid">
+				<div class="mui-row">
+				  <div class="auto-width center-content mui-col-xs-1" style="height:24px">
+					<div class="circle green"></div>
+				  </div>
+				  <div class="auto-width mui-col-xs-11">
+					<span class="location-info mui--text-body1">From : {{ride.origin}}</span>
+				  </div>
+				</div>
+				<br/>
+				<div class="mui-row">
+					<div class="auto-width center-content mui-col-xs-1" style="height:24px">
+					  <div class="circle red"></div>
+					</div>
+					<div class="auto-width mui-col-xs-11">
+					  <span class="location-info mui--text-body1">To : {{ride.destination}}</span>
+					</div>
+				  </div>
+				  <br/>
+				<div class="mui-row">
+				  <div class="auto-width center-content mui-col-xs-1" style="height:24px">
+					<div class="circle"></div>
+				  </div>
+				  <div class="auto-width mui-col-xs-11">
+					<span class="location-info mui--text-body1">{{ride.start_time}}</span>
+				  </div>
+				</div>
+				<br/>
+				<div class="mui-row">
+				  <div class="auto-width center-content mui-col-xs-1" style="height:24px">
+					<div class="circle"></div>
+				  </div>
+				  <div class="auto-width mui-col-xs-11">
+					<span class="location-info mui--text-body1">{{ride.end_time}}</span>
+				  </div>
+				</div>
+				<br/>
+				
+				<div class="mui-row">
+				  <div class="auto-width mui-col-xs-11">
+					{% for i in range(0, ride.current_pax) %}
+					  <i class="icon material-icons">person</i>
+					{% endfor %}
+				  </div>
+				</div>
+					<br/>
+				</div>
+			</div>
+			{% endfor %}
+          {% else %}
+            <div class="route-option">
+			 
+			  <div class="mui-container-fluid">
+				<div class="mui-row">
+				  <div class="auto-width mui-col-xs-11">
+					<span class="location-info mui--text-body1">No Past Rides Available to Display.</span>
+				  </div>
+				</div>
+				<br/>
+
+				</div>
+			</div>
+          {% endif %}
+		  
+    <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
+    <div id="toolbar">
+      <button class="create-btn menu-item" onclick="location.href = '/addRide'">
+        <i class="icon material-icons">add_circle</i>
+      </button>
+      <br />
+      <br />
+      <button class="car-btn menu-item" onclick="location.href = '/listCar'">
+        <i class="icon material-icons">directions_car</i>
+      </button>
+      <br />
+      <br />
+	  <button class="create-btn menu-item" onclick="location.href = '/pastRide'">
+        <i class="icon material-icons">history</i>
+      </button>
+      <br />
+      <br />
+      <button class="person-btn menu-item" onclick="location.href = '/updateUser'">
+        <i class="icon material-icons">person</i>
+      </button>
+      <br />
+      <br />
+      <button class="exit-btn menu-item" onclick="location.href = '/logout'">
+        <i class="icon material-icons">exit_to_app</i>
+      </button>
+      <br />
+      <br />
+      <button id="menu" class="menu-btn">
+        <i class="icon material-icons">menu</i>
+      </button>
+    </div>
+    <script>
+      main()
+
+      function main(){
+        originIn = document.getElementById("origin")
+        destIn = document.getElementById("destination")
+
+        originIn.addEventListener("keyup", function(event){
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Number 13 is the "Enter" key on the keyboard
+          if (event.keyCode === 13) {
+            // Trigger the button element with a click
+            document.getElementById("submit").click();
+          }
+        })
+
+        destIn.addEventListener("keyup", function(event){
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Number 13 is the "Enter" key on the keyboard
+          if (event.keyCode === 13) {
+            // Trigger the button element with a click
+            document.getElementById("submit").click();
+          }
+        })
+
+        menuItems = document.getElementsByClassName("menu-item");
+        for(i = 0; i < menuItems.length; i++) {
+          menuItems[i].style.display = "none";
+        }
+
+        document.getElementById("menu").addEventListener("click", function(event){
+          menuItems = document.getElementsByClassName("menu-item");
+          for(i = 0; i < menuItems.length; i++) {
+            if(menuItems[i].style.display === "none"){
+              menuItems[i].style.display = "flex";
+            }
+            else{
+              menuItems[i].style.display = "none";
+            }
+          }
+        })
+      }
+    </script>
+  </body>
+</html>
