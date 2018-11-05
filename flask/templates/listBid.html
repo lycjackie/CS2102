@@ -232,6 +232,11 @@
               </div>
             </div>
             <br/>
+            {% if isAdmin %}
+            <button class="edit-btn" onclick="location.href = '/updateBid?regno={{ bid.reg_no }}&starttime={{ bid.start_time }}&email={{ bid.bidder }}'">
+              <i class="icon material-icons">edit</i>
+            </button>
+            {% endif %}
             {% if bid.status != "successful" %}
             <button class="approve-btn" onclick="location.href = '/approveBid?regno={{ bid.reg_no }}&starttime={{ bid.start_time }}&email={{ bid.bidder }}'">
               <i class="icon material-icons">beenhere</i>

@@ -356,7 +356,7 @@ def renderListBid():
     else:
         rides = ride_bid.get_bid(session.get('email'))
         print rides
-        return render_template('listBid.html', rides=rides)
+        return render_template('listBid.html', rides=rides, isAdmin=session.get('logged_in')[0][4])
 
 
 @app.route('/approve')
@@ -371,7 +371,7 @@ def renderApprovePage():
             try:
                 bids = ride_bid.get_AllBidForSingleRide(reg_no, start_time)
                 print bids
-                return render_template('listBid.html', bids=bids)
+                return render_template('listBid.html', bids=bids, isAdmin=session.get('logged_in')[0][4])
             except ValueError:
                 return redirect('/')
     except Exception:
@@ -480,7 +480,7 @@ def add_user_bid():
 def RenderUpdatePage():
     reg_no = request.args.get('regno')
     start_time = request.args.get('starttime')
-    email = session.get('email')
+    email = request.args.get('email')
     if reg_no is None:
 		return redirect('/')
     else:

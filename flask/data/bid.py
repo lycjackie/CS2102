@@ -39,7 +39,7 @@ def add_bid(bid_detail):
 # Get bid for the owner to approve or list all bid
 def get_bid(email):
 	sql= """
-	SELECT rb.reg_no,c.email as owner, rb.email as bidder, r.origin,r.destination,rb.start_time,rb.status, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
+	SELECT rb.reg_no,c.email as owner, rb.email as bidder, r.origin,r.destination,rb.start_time,rb.status, rb.bid_price as bid_amt, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
 	FROM ride_bid rb
 	inner join ride r ON rb.reg_no = r.reg_no and rb.start_time = r.start_time
 	INNER JOIN car c on r.reg_no = c.reg_no
@@ -62,7 +62,7 @@ def get_bid(email):
 	return res
 def getSingleBid(email,reg_no,start_time):
 	sql="""
-	SELECT rb.email as bidder , rb.reg_no, u.first_name as bidder_name , r.destination, r.origin, rb.start_time, rb.status, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
+	SELECT rb.email as bidder , rb.reg_no, u.first_name as bidder_name , r.destination, r.origin, rb.start_time, rb.status, rb.bid_price as bid_amt, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
 	FROM ride_bid as rb
 	INNER JOIN \"user\" u on u.email = rb.email
 	INNER JOIN ride r on rb.reg_no = r.reg_no and rb.start_time = r.start_time
@@ -118,7 +118,7 @@ def approve_bid(email,reg_no,start_time,status,owner_email):
 
 def get_AllBidForSingleRide(reg_no,start_time):
 	sql = """
-	SELECT rb.reg_no,c.email as owner, rb.email as bidder,u.first_name as bidder_name, r.origin,r.destination,rb.start_time,rb.status, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
+	SELECT rb.reg_no,c.email as owner, rb.email as bidder,u.first_name as bidder_name, r.origin,r.destination,rb.start_time,rb.status, rb.bid_price as bid_amt, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
 	FROM ride_bid rb
 	inner join ride r ON rb.reg_no = r.reg_no and rb.start_time = r.start_time
 	INNER JOIN car c on r.reg_no = c.reg_no
