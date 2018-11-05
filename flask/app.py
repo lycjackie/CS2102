@@ -269,7 +269,7 @@ def updateRide():
 		origin = ""
 		destination = ""
 		list = ride.searchRides(origin, destination, session.get('email'))
-		return render_template('index.html', email=session.get('email'), rides=list, origin=origin, destination=destination)
+		return redirect('/')
 
 
 @app.route("/searchRides", methods=['POST'])
