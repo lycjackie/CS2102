@@ -60,13 +60,19 @@ def updateUser(email, first_name, last_name):
     return
 
 def adminUpdateUser(email, contact, first_name, last_name, password):
-	sql = "UPDATE \"user\" SET first_name = %s, last_name = %s, contact = %s, password = %s WHERE email = %s;"
+	sql = ""
+	if password != "":
+		sql = "UPDATE \"user\" SET first_name = %s, last_name = %s, contact = %s, password = %s WHERE email = %s;"
+	else:
+		sql = "UPDATE \"user\" SET first_name = %s, last_name = %s, contact = %s WHERE email = %s;"
 	s = None
 	db = connect()
 	try:
 		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
-
-		cur.execute(sql, (first_name, last_name, contact, hash_it(password), email))
+		if password != "":
+			cur.execute(sql, (first_name, last_name, contact, hash_it(password), email))
+		else:
+			cur.execute(sql, (first_name, last_name, contact, email))
 		# finish
 		db.commit()
 		cur.close()
