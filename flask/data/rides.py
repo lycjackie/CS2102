@@ -151,12 +151,15 @@ def searchRides(origin, destination, email):
 def pastRides(email):
     sql = """
 
-    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.end_time, r.current_pax,
+    SELECT u.first_name,u.email,r.origin,r.destination,r.status,r.reg_no, r.start_time, r.end_time, r.current_pax, b.bid_price,
    	EXISTS (SELECT c1.email FROM car c1 WHERE c1.reg_no = c.reg_no AND c1.email = %s) as is_driver,
    	EXISTS (SELECT rb.email FROM ride_bid rb WHERE rb.reg_no = c.reg_no AND rb.email = %s) as has_success_bid
-    FROM audit_log r, "user" u, car c
+    FROM audit_log r, "user" u, car c, ride_bid b
     WHERE r.reg_no = c.reg_no
     and c.email = u.email
+	and b.reg_no = r.reg_no
+	and r.start_time = b.start_time
+	and u.email = b.email
 	and r.status = 'completed'
     ORDER BY r.end_time DESC
      """
