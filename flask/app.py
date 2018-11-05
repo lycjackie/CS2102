@@ -23,6 +23,8 @@ def main():
     'Check if logged in'
     if session.get('logged_in') is None:
         return redirect('/login?invalid=true')
+    if (session.get('logged_in')[0][4]):
+        return redirect('/admin/users')
 
     origin = ""
     destination = ""
@@ -45,12 +47,14 @@ def renderLogin():
 def login():
     email = request.form['email']
     password = request.form['password']
-    
+
     u = user.retrieveUser({'email': email,'password': password})
     print u
     if len(u) > 0:
         session['logged_in'] = u
         session['email'] = email
+        if (u[0][4]):
+            return redirect('/admin/users')
         return redirect('/')
     else:
         return redirect('/login?invalid=true&credentialError=true')
@@ -114,6 +118,49 @@ def updateUser():
     else:
         return redirect('/')
 
+@app.route('/admin/users')
+def adminUsers():
+    list = user.retrieveAllUsers()
+    return render_template('users.html', users=list)
+
+@app.route('/admin/addUser', methods=['POST'])
+def adminAddUser():
+    first_name = request.form['firstName']
+    last_name = request.form['lastName']
+    email = request.form['email']
+    contact = request.form['contact']
+    password = request.form['password']
+    u = user.addUser({
+        'email': email,
+        'firstName': first_name,
+        'lastName': last_name,
+        'contact': contact,
+        'password': password
+    })
+    return redirect('/admin/users')
+
+@app.route('/admin/updateUser', methods=['POST'])
+def adminUpdateUser():
+    first_name = request.form['firstName']
+    last_name = request.form['lastName']
+    email = request.form['email']
+    contact = request.form['contact']
+    password = request.form['password']
+    user.adminUpdateUser(email, contact, first_name, last_name, password)
+    if session.get('logged_in') is None:
+		return redirect('/login')
+    else:
+        return redirect('/admin/users')
+
+@app.route('/admin/deleteUser', methods=['POST'])
+def adminDeleteUser():
+    email = request.form['email']
+    user.adminDeleteUser(email)
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        return redirect('/admin/users')
+
 @app.route('/addRide')
 def renderAddRide():
     if session.get('logged_in') is None:
@@ -125,7 +172,7 @@ def renderAddRide():
 			return render_template('addRide.html', users=users, cars=cars)
         except ValueError:
             return redirect('/')
-			
+
 @app.route('/pastRide')
 def renderPastRides():
     if session.get('logged_in') is None:
@@ -135,7 +182,7 @@ def renderPastRides():
 			rides = ride.pastRides(session.get('email'))
 			return render_template('pastRide.html', rides=rides)
         except ValueError:
-            return redirect('/')			
+            return redirect('/')
 
 
 @app.route("/addRide", methods=['POST'])
@@ -430,7 +477,6 @@ def Update_Bid():
                 return redirect('/login')
         except ValueError:
             return redirect('/')
-
 
 if __name__ == '__main__':
     app.run(debug=True)

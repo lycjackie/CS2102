@@ -59,6 +59,40 @@ def updateUser(email, first_name, last_name):
 
     return
 
+def adminUpdateUser(email, contact, first_name, last_name, password):
+	sql = "UPDATE \"user\" SET first_name = %s, last_name = %s, contact = %s, password = %s WHERE email = %s;"
+	s = None
+	db = connect()
+	try:
+		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) # nameTuple for easier access i.e using .Columns
+
+		cur.execute(sql, (first_name, last_name, contact, hash_it(password), email))
+		# finish
+		db.commit()
+		cur.close()
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if db is not None:
+			db.close()
+
+	return
+
+def adminDeleteUser(email):
+	sql = "DELETE FROM \"user\" WHERE email = %s;"
+	s = None
+	db = connect()
+	try:
+		cur = db.cursor()
+		cur.execute(sql, (email,))
+		db.commit()
+		db.close()
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if db is not None:
+			db.close()
+	return
 
 def retrieveUser(user):
     sql = "SELECT * FROM \"user\" Where \"email\" = %s AND \"password\" = %s;"
@@ -83,6 +117,22 @@ def retrieveUser(user):
             db.close()
 
     return res
+
+def retrieveAllUsers():
+	sql = "SELECT * FROM \"user\";"
+	res = []
+	db = connect()
+	try:
+		cur = db.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor)
+		no_rows = cur.execute(sql)
+		res = cur.fetchall()
+		cur.close()
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if db is not None:
+			db.close()
+	return res
 
 def hash_it(password):
     m = hashlib.sha256()
