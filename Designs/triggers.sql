@@ -67,11 +67,12 @@ $$;
 
 
 
-	CREATE TRIGGER cap_check
-  BEFORE INSERT
-  ON ride_bid
-  FOR EACH ROW
-  EXECUTE PROCEDURE capacity_checker();
+create trigger cap_check
+	before insert OR update
+	on ride_bid
+	for each row
+	execute procedure capacity_checker()
+;
   
   
 create or replace function audit() returns trigger
