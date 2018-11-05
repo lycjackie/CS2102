@@ -35,23 +35,35 @@ $BODY$ LANGUAGE plpgsql;
   EXECUTE PROCEDURE on_approval_update_pax();
 
 
-CREATE OR REPLACE FUNCTION capacity_checker()
-  RETURNS trigger AS
-$func$
+create or replace function capacity_checker()
+	returns trigger
+language plpgsql
+as $$
 BEGIN
-    IF ( SELECT (r.current_pax + NEW.no_pax <= m.capacity)
-    FROM ride r
-    inner join car c on r.reg_no = c.reg_no
-    INNER JOIN model m on c.make = m.make and c.model =m.model
-    AND r.reg_no = NEW.reg_no
-    AND r.start_time = NEW.start_time)
-      THEN
-      RETURN NEW;
-  ELSE
-  RAISE EXCEPTION 'Exceeded maximum capacity, please reduce your number of passenger';
-     END IF;
+	IF (SELECT (r.current_pax + NEW.no_pax <= m.capacity)
+			FROM ride r
+						 inner join car c on r.reg_no = c.reg_no
+						 INNER JOIN model m on c.make = m.make and c.model = m.model
+																		 AND r.reg_no = NEW.reg_no
+																		 AND r.start_time = NEW.start_time)
+	THEN
+	--
+	-- Do nothing
+	ELSE
+		RAISE EXCEPTION 'Exceeded maximum capacity, please reduce your number of passenger';
+	END IF;
+	IF (SELECT (1)
+			FROM ride r
+						 INNER JOIN car c on r.reg_no = c.reg_no
+			where r.reg_no = NEW.reg_no
+				AND r.start_time = NEW.start_time
+				AND c.email = NEW.email)
+	THEN RAISE EXCEPTION 'Cannot Bid for Own Ride';
+	ELSE
+		RETURN NEW;
+	END IF;
 END
-$func$  LANGUAGE plpgsql;
+$$;
 
 
 
