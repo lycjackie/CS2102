@@ -118,7 +118,7 @@ create table if not exists audit_log
 
 ```
 
-### Triggers
+### Triggers and function
 
 ```sql
 
@@ -210,7 +210,79 @@ create trigger to_audit
 
 
 
-### Sample SQL
+### Sample Code SQL
+
+#### Complex SQL
+
+> Ride Capacity Update and checks
+
+For every `successful`  ride bid that is approved by the `driver` , there will be a trigger to update the current capacity of the ride.
+
+##### Trigger as shown below
+
+```sql
+create trigger approval_update
+	after update
+	on ride_bid
+	for each row
+	execute procedure on_approval_update_pax()
+;
+```
+
+##### on_approval_update_pax function
+
+```sql
+create or replace function on_approval_update_pax() returns trigger
+	language plpgsql
+as $$
+BEGIN
+ IF NEW.status = 'successful' and OLD.STATUS <> 'successful'
+ THEN
+	UPDATE ride
+		SET current_pax = current_pax + NEW.no_pax
+	 WHERE reg_no = NEW.reg_no
+	 AND start_time = NEW.start_time;
+	 -- The following part update all current biddings which have their number of passenger above the current available seats
+	 -- for example total pax is 4, current pax is 2
+	 -- all bidding which is >2 will be automatically changed to unsuccessful
+  UPDATE ride_bid rb
+    SET status = 'unsuccessful'
+  FROM ride r, car c, model m
+  WHERE r.reg_no = rb.reg_no
+  AND r.start_time = rb.start_time
+  AND r.reg_no = c.reg_no
+  AND c.make = m.make
+  AND c.model = m.model
+  AND rb.reg_no = NEW.reg_no
+  AND rb.start_time = NEW.start_time
+  AND rb.status = 'pending'
+  AND rb.no_pax > (m.capacity - r.current_pax);
+ END IF;
+ -- return NULL as trigger is called after update
+ RETURN NULL;
+END
+$$
+;
+```
+
+The `current_pax` attribute allow us to check for available seats easily. 
+
+Which is being shown below
+
+##### Query to retrieve Ride information
+
+```sql
+SELECT u.first_name, r.origin,r.destination,r.status,r.start_time,r.reg_no, (m.capacity - r.current_pax) as pax_left
+FROM ride r, "user" u, car c,model m
+WHERE r.reg_no = c.reg_no
+AND c.model = m.model
+AND c.make = m.make
+AND c.email = u.email
+AND r.start_time = %s
+AND r.reg_no = %s
+```
+
+
 
 ### Search Ride
 
@@ -240,10 +312,6 @@ ORDER BY r.start_time ASC
 
 
 > When the car ride available capacity is below what the user is bidding for, the system will reject the transaction via `trigger`
-
-![1541317541160](C:\Users\Jackie\AppData\Roaming\Typora\typora-user-images\1541317541160.png)
-
-![1541317549706](C:\Users\Jackie\AppData\Roaming\Typora\typora-user-images\1541317549706.png)
 
 ### Trigger
 
@@ -284,8 +352,6 @@ INSERT INTO ride_bid (email,start_time,reg_no,no_pax,bid_price) VALUES (%s,%s,%s
 
 
 ## Ride History
-
-![1541319172214](C:\Users\Jackie\AppData\Roaming\Typora\typora-user-images\1541319172214.png)
 
 ### Trigger
 
