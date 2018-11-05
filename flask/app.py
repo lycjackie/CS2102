@@ -23,8 +23,6 @@ def main():
     'Check if logged in'
     if session.get('logged_in') is None:
         return redirect('/login?invalid=true')
-    if (session.get('logged_in')[0][4]):
-        return redirect('/admin/users')
 
     origin = ""
     destination = ""
@@ -35,7 +33,7 @@ def main():
     list = ride.searchRides(origin, destination, session.get('email'))
     print list
 
-    return render_template('index.html', email=session.get('email'), rides=list, origin=origin, destination=destination)
+    return render_template('index.html', email=session.get('email'), rides=list, origin=origin, destination=destination, isAdmin=session.get('logged_in')[0][4])
 
 
 @app.route('/login')
@@ -53,8 +51,6 @@ def login():
     if len(u) > 0:
         session['logged_in'] = u
         session['email'] = email
-        if (u[0][4]):
-            return redirect('/admin/users')
         return redirect('/')
     else:
         return redirect('/login?invalid=true&credentialError=true')
@@ -160,6 +156,43 @@ def adminDeleteUser():
         return redirect('/login')
     else:
         return redirect('/admin/users')
+
+@app.route('/admin/models')
+def adminModels():
+    list = model.retrieveAllModels()
+    return render_template('models.html', models=list)
+
+@app.route('/admin/addModel', methods=['POST'])
+def adminAddModel():
+    make = request.form['make']
+    mod = request.form['model']
+    capacity = request.form['capacity']
+    model.adminAddModel(mod, make, capacity)
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        return redirect('/admin/models')
+
+@app.route('/admin/updateModel', methods=['POST'])
+def adminUpdateModel():
+    make = request.form['make']
+    mod = request.form['model']
+    capacity = request.form['capacity']
+    model.adminUpdateModel(mod, make, capacity)
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        return redirect('/admin/models')
+
+@app.route('/admin/deleteModel', methods=['POST'])
+def adminDeleteModel():
+    make = request.form['make']
+    mod = request.form['model']
+    model.adminDeleteModel(mod, make)
+    if session.get('logged_in') is None:
+        return redirect('/login')
+    else:
+        return redirect('/admin/models')
 
 @app.route('/addRide')
 def renderAddRide():

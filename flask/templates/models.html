@@ -11,48 +11,32 @@
     <table border="1">
       <tr>
         <th>
-          Email
+          Model
         </th>
         <th>
-          Contact
+          Make
         </th>
         <th>
-          First Name
-        </th>
-        <th>
-          Last Name
-        </th>
-        <th>
-          Password
+          Capacity
         </th>
         <th colSpan="2">
         </th>
       </tr>
       <tr>
-        <form method="post" action="/admin/addUser">
+        <form method="post" action="/admin/addModel">
           <td>
             <div class="mui-textfield mui-textfield--float-label">
-              <input name="email" type="email" required>
+              <input name="model" type="text" required>
             </div>
           </td>
           <td>
             <div class="mui-textfield mui-textfield--float-label">
-              <input name="contact" type="text" required>
+              <input name="make" type="text" required>
             </div>
           </td>
           <td>
             <div class="mui-textfield mui-textfield--float-label">
-              <input name="firstName" type="text" required>
-            </div>
-          </td>
-          <td>
-            <div class="mui-textfield mui-textfield--float-label">
-              <input name="lastName" type="text" required>
-            </div>
-          </td>
-          <td>
-            <div class="mui-textfield mui-textfield--float-label">
-              <input name="password" type="password" required>
+              <input name="capacity" type="number" required>
             </div>
           </td>
           <td>
@@ -60,42 +44,34 @@
           </td>
         </form>
       </tr>
-      {% for user in users %}
+      {% for model in models %}
         <tr>
-          <form method="post" action="/admin/updateUser">
+          <form method="post" action="/admin/updateModel">
             <td>
               <div class="mui-textfield mui-textfield--float-label">
-                <input name="displayemail" type="email" value="{{user.email}}">
-                <input name="email" type="hidden" value="{{user.email}}" required>
+                <input name="displaymodel" type="text" value="{{model.model}}">
+                <input name="model" type="hidden" value="{{model.model}}" required>
               </div>
             </td>
             <td>
               <div class="mui-textfield mui-textfield--float-label">
-                <input name="contact" type="text" value="{{user.contact}}" required>
+                <input name="displaymake" type="text" value="{{model.make}}">
+                <input name="make" type="hidden" value="{{model.make}}" required>
               </div>
             </td>
             <td>
               <div class="mui-textfield mui-textfield--float-label">
-                <input name="firstName" type="text" value="{{user.first_name}}" required>
-              </div>
-            </td>
-            <td>
-              <div class="mui-textfield mui-textfield--float-label">
-                <input name="lastName" type="text" value="{{user.last_name}}" required>
-              </div>
-            </td>
-            <td>
-              <div class="mui-textfield mui-textfield--float-label">
-                <input name="password" type="password">
+                <input name="capacity" type="text" value="{{model.capacity}}" required>
               </div>
             </td>
             <td>
               <button type="submit" class="mui-btn">Update</button>
             </td>
           </form>
-          <form method="post" action="/admin/deleteUser">
+          <form method="post" action="/admin/deleteModel">
             <td>
-              <input name="email" type="hidden" value="{{user.email}}" required>
+              <input name="make" type="hidden" value="{{model.make}}" required>
+              <input name="model" type="hidden" value="{{model.model}}" required>
               <button type="submit" class="mui-btn">Delete</button>
             </td>
           </form>

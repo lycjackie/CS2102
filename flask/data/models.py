@@ -74,7 +74,7 @@ def retrieveAllModels():
 
 def retrieveAllModelsForUpdate(reg_no):
     sql = """ SELECT m.\"make\",m.\"model\",m.\"capacity\"
-    FROM \"model\" m LEFT OUTER JOIN 
+    FROM \"model\" m LEFT OUTER JOIN
     (SELECT c.\"make\",c.\"model\", c.\"reg_no\" FROM \"car\" c WHERE c.\"reg_no\" = %s) m1
     ON m1.\"make\" = m.\"make\" AND m1.\"model\" = m.\"model\"
     ORDER BY m1.\"reg_no\", m.\"make\", m.\"model\"
@@ -93,6 +93,54 @@ def retrieveAllModelsForUpdate(reg_no):
         if db is not None:
             db.close()
     return res
+
+def adminAddModel(model, make, capacity):
+    sql = "INSERT INTO \"model\" VALUES (%s, %s, %s);"
+    db = connect()
+    res = None
+    try:
+        cur = db.cursor()
+        cur.execute(sql, (model, make, capacity))
+        db.commit()
+        db.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if db is not None:
+            db.close()
+    return
+
+def adminUpdateModel(model, make, capacity):
+    sql = "UPDATE \"model\" SET capacity = %s WHERE model = %s AND make = %s;"
+    db = connect()
+    res = None
+    try:
+        cur = db.cursor()
+        cur.execute(sql, (capacity, model, make))
+        db.commit()
+        db.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if db is not None:
+            db.close()
+    return
+
+def adminDeleteModel(model, make):
+    sql = "DELETE FROM \"model\" WHERE model = %s AND make = %s;"
+    db = connect()
+    res = None
+    try:
+        cur = db.cursor()
+        cur.execute(sql, (model, make))
+        db.commit()
+        db.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if db is not None:
+            db.close()
+    return
 
 # def updateRide(rideId, newOrigin, newDestination):
 #

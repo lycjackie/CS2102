@@ -346,6 +346,18 @@
       </button>
       <br />
       <br />
+      {% if isAdmin %}
+        <button class="person-btn menu-item" onclick="location.href = '/admin/models'">
+          <i class="icon material-icons">business</i>
+        </button>
+        <br />
+        <br />
+        <button class="person-btn menu-item" onclick="location.href = '/admin/users'">
+          <i class="icon material-icons">supervisor_account</i>
+        </button>
+      {% endif %}
+      <br />
+      <br />
       <button class="exit-btn menu-item" onclick="location.href = '/logout'">
         <i class="icon material-icons">exit_to_app</i>
       </button>
