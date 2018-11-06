@@ -85,7 +85,7 @@ create table if not exists ride_bid
 	no_pax integer not null
 		constraint min_pax
 			check (no_pax > 0),
-	bid_price double precision,
+	bid_price double precision check (bid_price > 0 ),
 	status varchar(13) default 'pending'::character varying not null
 		constraint bid_status_type
 			check (((status)::text = 'pending'::text) OR ((status)::text = 'successful'::text) OR ((status)::text = 'unsuccessful'::text)),
@@ -159,32 +159,11 @@ create trigger approval_update
 	execute procedure on_approval_update_pax()
 ;
 
-create or replace function capacity_checker() returns trigger
-	language plpgsql
-as $$
-BEGIN
-    IF ( SELECT (r.current_pax + NEW.no_pax <= m.capacity)
-    FROM ride r
-    inner join car c on r.reg_no = c.reg_no
-    INNER JOIN model m on c.make = m.make and c.model =m.model
-    AND r.reg_no = NEW.reg_no
-    AND r.start_time = NEW.start_time)
-      THEN
-      RETURN NEW;
-  ELSE
-  RAISE EXCEPTION 'Exceeded maximum capacity, please reduce your number of passenger';
-     END IF;
-END
-$$
-;
 
 
-create trigger cap_check
-	before insert
-	on ride_bid
-	for each row
-	execute procedure capacity_checker()
-;
+
+
+
 
 create or replace function audit() returns trigger
 	language plpgsql
@@ -207,6 +186,49 @@ create trigger to_audit
 	execute procedure audit()
 ;
 ```
+
+
+
+```sql
+create or replace function capacity_checker()
+  returns trigger
+language plpgsql
+as $$
+BEGIN
+  IF (SELECT (r.current_pax + NEW.no_pax <= m.capacity)
+      FROM ride r
+             inner join car c on r.reg_no = c.reg_no
+             INNER JOIN model m on c.make = m.make and c.model = m.model
+                                     AND r.reg_no = NEW.reg_no
+                                     AND r.start_time = NEW.start_time)
+  THEN
+  --
+  -- Do nothing
+  ELSE
+    RAISE EXCEPTION 'Exceeded maximum capacity, please reduce your number of passenger';
+  END IF;
+  IF (SELECT (1)
+      FROM ride r
+             INNER JOIN car c on r.reg_no = c.reg_no
+      where r.reg_no = NEW.reg_no
+        AND r.start_time = NEW.start_time
+        AND c.email = NEW.email)
+  THEN RAISE EXCEPTION 'Cannot Bid for Own Ride';
+  ELSE
+    RETURN NEW;
+  END IF;
+END
+$$;
+
+create trigger cap_check
+	before insert
+	on ride_bid
+	for each row
+	execute procedure capacity_checker()
+;
+```
+
+
 
 
 
