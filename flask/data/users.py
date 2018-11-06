@@ -13,13 +13,14 @@ create table "user"
 );
 '''
 def addUser(user):
-    sql = "INSERT INTO \"user\" VALUES (%s,%s,%s,%s,false,%s) RETURNING \"email\";"
+    #sql = "INSERT INTO \"user\" VALUES (%s,%s,%s,%s,false,%s) RETURNING \"email\";"
+    sql = "SELECT REGISTER(%s,%s,%s,%s,%s)"
     s = None
     db = connect()
     try:
         cur = db.cursor()
-        password = hash_it(user['password'])
-        cur.execute(sql, (user['email'],user['contact'],user['firstName'],user['lastName'],password))
+        #password = hash_it(user['password'])
+        cur.execute(sql, (user['email'],user['contact'],user['firstName'],user['lastName'],user['password']))
 
         s = cur.fetchone()[0]
         ## Insert the role
@@ -101,13 +102,14 @@ def adminDeleteUser(email):
 	return
 
 def retrieveUser(user):
-    sql = "SELECT * FROM \"user\" Where \"email\" = %s AND \"password\" = %s;"
+    #sql = "SELECT * FROM \"user\" Where \"email\" = %s AND \"password\" = %s;"
+    sql = "select * from login(%s,%s)"
     res = []
     db = connect()
     try:
         cur = db.cursor()
-        password = hash_it(user['password'])
-        no_rows = cur.execute(sql,(user['email'],password)) # need 1 comma behind if only using 1 parameter.
+        #password = hash_it(user['password'])
+        no_rows = cur.execute(sql,(user['email'],user['password'])) # need 1 comma behind if only using 1 parameter.
 
         while True: # loop cursor and retrieve results
 			row = cur.fetchone() # should only return 1 result
