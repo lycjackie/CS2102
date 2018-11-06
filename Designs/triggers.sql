@@ -97,3 +97,30 @@ create trigger to_audit
   on ride
   for each row
 execute procedure audit();
+
+-- Note that 
+-- Need to run `create extension pgcrypto;` as super user before the function work
+
+CREATE OR REPLACE FUNCTION register(email varchar(256),contact numeric(8),first_name varchar(50), last_name varchar(50),password varchar(256))
+	RETURNS BOOLEAN AS $$
+	DECLARE
+		success BOOLEAN;
+		hashPassword varchar(512);
+	BEGIN
+		SELECT encode(digest($5, 'sha256'), 'hex') INTO hashPassword;
+		INSERT INTO "user" VALUES ($1,$2,$3,$4,false ,hashPassword) Returning 1 into success;
+		RETURN success;
+	END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION login(email varchar(256),password varchar(256))
+	RETURNS setof "user" AS $$
+	DECLARE
+		hashPassword varchar(512);
+	BEGIN
+		SELECT encode(digest($2, 'sha256'), 'hex') INTO hashPassword;
+		RETURN QUERY SELECT * FROM "user" where "user".email = $1 and "user".password = hashPassword;
+	END;
+$$ LANGUAGE plpgsql;
