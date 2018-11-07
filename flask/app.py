@@ -225,7 +225,7 @@ def addRide():
 	rideDateTime = request.form['rideDateTime']
 	car = request.form['car']
 	pax = '0'
-	status = request.form['status']
+	status = 'in progress'
 
 	ride_details = {'RideStartTime': rideDateTime, 'Status': status, 'Current_pax': pax,
 				 'Origin': origin, 'Destination': destination, 'reg_no': car}
