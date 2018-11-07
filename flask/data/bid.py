@@ -62,10 +62,12 @@ def get_bid(email):
 	return res
 def getSingleBid(email,reg_no,start_time):
 	sql="""
-	SELECT rb.email as bidder , rb.reg_no, u.first_name as bidder_name , r.destination, r.origin, rb.start_time, rb.status, rb.bid_price as bid_amt, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax
+	SELECT rb.email as bidder , rb.reg_no, u.first_name as bidder_name , r.destination, r.origin, rb.start_time, rb.status, rb.bid_price as bid_amt, (rb.bid_price * rb.no_pax) as bid_price, rb.no_pax, (m.capacity - r.current_pax) as pax_left
 	FROM ride_bid as rb
 	INNER JOIN \"user\" u on u.email = rb.email
 	INNER JOIN ride r on rb.reg_no = r.reg_no and rb.start_time = r.start_time
+	INNER JOIN car c on c.reg_no = r.reg_no
+	INNER JOIN \"model\" m on m.model = c.model AND c.make = m.make
 	AND rb.email = %s
 	AND rb.reg_no = %s
 	and rb.start_time = %s

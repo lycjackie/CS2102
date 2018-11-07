@@ -147,7 +147,7 @@ def searchRides(origin, destination, email):
         if db is not None:
             db.close()
     return res
-	
+
 def pastRides(email):
     sql = """
 
@@ -175,7 +175,7 @@ def pastRides(email):
     finally:
         if db is not None:
             db.close()
-    return res	
+    return res
 
 if __name__ == '__main__':
     '''
