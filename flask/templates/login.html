@@ -84,7 +84,7 @@
     </div>
     {% if invalid %}
       <div id="error">
-        <p>User authentication failed.{% if credentialError %} Email not found. {% else %} Please login to continue. {% endif %}</p>
+        <p>User authentication failed,{% if credentialError %} email and password do not match. {% else %} please login to continue. {% endif %}</p>
       </div>
     {% endif %}
     <div id="container" class="fill-parent">

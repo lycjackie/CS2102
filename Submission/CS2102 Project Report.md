@@ -63,7 +63,9 @@ create table if not exists ride
 	status varchar(11) not null
 		constraint ride_status_type
 			check (((status)::text = 'in progress'::text) OR ((status)::text = 'completed'::text)),
-	current_pax integer not null,
+	current_pax integer not null
+		constraint pax_min
+			check (current_pax >= 0),
 	destination varchar(256) not null,
 	origin varchar(256) not null,
 	reg_no varchar(8) not null

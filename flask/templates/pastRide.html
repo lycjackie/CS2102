@@ -38,7 +38,6 @@
       }
 
       .content {
-        padding-top: 145px;
       }
 
       .routing-field {
@@ -133,6 +132,11 @@
         color: #fe000a;
       }
 
+      .home-btn > .icon {
+        font-size: 3em;
+        color: #fe000a;
+      }
+
       .person-btn > .icon {
         font-size: 3em;
       }
@@ -208,47 +212,16 @@
   <body>
     <div id="overlay" class="fill-parent menu-item">
     </div>
-    <form class="routing-form">
-      <div class="routing-field">
-        <div class="mui-container-fluid">
-          <div class="mui-row">
-            <div class="center-content mui-col-xs-1" style="height:32px;padding:0">
-              <div class="circle green"></div>
-            </div>
-            <div class="mui-col-xs-10">
-              <div class="clear-margin mui-textfield">
-                <input id="origin" name="origin" type="text" placeholder="Pick Up Address" value="{{origin}}">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="routing-field">
-        <div class="mui-container-fluid">
-          <div class="mui-row">
-            <div class="center-content mui-col-xs-1" style="height:32px;padding:0">
-              <div class="circle red"></div>
-            </div>
-            <div class="mui-col-xs-10">
-              <div class="clear-margin mui-textfield">
-                <input id="destination" name="destination" type="text" placeholder="Destination Address" value="{{destination}}">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button id="submit" style="display:none" type="submit"></button>
-    </form>
     <div class="content">
       <div class="routing-heading">
         <div class="mui--text-subhead">Past Rides</div>
       </div>
-	  
-	  
+
+
         {% if rides %}
            {% for ride in rides %}
 			<div class="route-option">
-			 
+
 			  <div class="mui-container-fluid">
 				<div class="mui-row">
 				  <div class="auto-width center-content mui-col-xs-1" style="height:24px">
@@ -286,7 +259,7 @@
 				  </div>
 				</div>
 				<br/>
-				
+
 				<div class="mui-row">
 				  <div class="auto-width mui-col-xs-11">
 					{% for i in range(0, ride.current_pax) %}
@@ -295,27 +268,27 @@
 				  </div>
 				</div>
 				<br/>
-				
+
 				<div class="mui-row">
 				  <div class="auto-width mui-col-xs-11">
 					<span class="location-info mui--text-body1">Total Price :{{ride.bid_price}}</span>
 				  </div>
 				</div>
 				<br/>
-				
+
 				<div class="mui-row">
 				  <div class="auto-width mui-col-xs-11">
 					<span class="location-info mui--text-body1">Price Per Head :{{ride.bid_price / ride.current_pax}}</span>
 				  </div>
 				</div>
-				<br/>		
+				<br/>
 					<br/>
 				</div>
 			</div>
 			{% endfor %}
           {% else %}
             <div class="route-option">
-			 
+
 			  <div class="mui-container-fluid">
 				<div class="mui-row">
 				  <div class="auto-width mui-col-xs-11">
@@ -327,26 +300,9 @@
 				</div>
 			</div>
           {% endif %}
-		  
-    <button onclick="location.href = '/'" class="mui-btn mui-btn--raised">Back</button>
     <div id="toolbar">
-      <button class="create-btn menu-item" onclick="location.href = '/addRide'">
-        <i class="icon material-icons">add_circle</i>
-      </button>
-      <br />
-      <br />
-      <button class="car-btn menu-item" onclick="location.href = '/listCar'">
-        <i class="icon material-icons">directions_car</i>
-      </button>
-      <br />
-      <br />
-	  <button class="create-btn menu-item" onclick="location.href = '/pastRide'">
-        <i class="icon material-icons">history</i>
-      </button>
-      <br />
-      <br />
-      <button class="person-btn menu-item" onclick="location.href = '/updateUser'">
-        <i class="icon material-icons">person</i>
+      <button class="home-btn menu-item" onclick="location.href = '/'">
+        <i class="icon material-icons">home</i>
       </button>
       <br />
       <br />
@@ -363,28 +319,6 @@
       main()
 
       function main(){
-        originIn = document.getElementById("origin")
-        destIn = document.getElementById("destination")
-
-        originIn.addEventListener("keyup", function(event){
-          // Cancel the default action, if needed
-          event.preventDefault();
-          // Number 13 is the "Enter" key on the keyboard
-          if (event.keyCode === 13) {
-            // Trigger the button element with a click
-            document.getElementById("submit").click();
-          }
-        })
-
-        destIn.addEventListener("keyup", function(event){
-          // Cancel the default action, if needed
-          event.preventDefault();
-          // Number 13 is the "Enter" key on the keyboard
-          if (event.keyCode === 13) {
-            // Trigger the button element with a click
-            document.getElementById("submit").click();
-          }
-        })
 
         menuItems = document.getElementsByClassName("menu-item");
         for(i = 0; i < menuItems.length; i++) {

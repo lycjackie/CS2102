@@ -7,7 +7,9 @@ create table ride
 (
 	start_time timestamp not null,
 	status varchar(10) not null constraint ride_status_type check (((status) = 'in progress') OR ((status) = 'completed')),
-	current_pax integer not null,
+	current_pax integer not null
+		constraint pax_min
+			check (current_pax >= 0),
 	destination varchar(256) not null,
 	origin varchar(256) not null,
 	reg_no varchar(8) not null constraint ride_reg_no_fk references car,
@@ -147,7 +149,7 @@ def searchRides(origin, destination, email):
         if db is not None:
             db.close()
     return res
-	
+
 def pastRides(email):
     sql = """
 
@@ -175,7 +177,7 @@ def pastRides(email):
     finally:
         if db is not None:
             db.close()
-    return res	
+    return res
 
 if __name__ == '__main__':
     '''
