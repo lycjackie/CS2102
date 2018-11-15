@@ -443,37 +443,39 @@ def renderBidPage():
 
 @app.route('/bid', methods=['POST'])
 def add_user_bid():
-	if session.get('email') is None:
-		return redirect('/login')
-	else:
-		try:
-			reg_no = request.form['reg_no']
-			start_time = dt.datetime.strptime(
-			request.form['start_time'], '%Y-%m-%d %H:%M:%S')
-			no_pax = request.form['no_pax']
-			price = request.form['price']
-			ride_detail = {
-			'reg_no': reg_no,
-			'start_time': start_time,
-			'no_pax': no_pax,
-			'bid_price': price,
-			'email': session.get('email')
-			}
-			res = ride_bid.add_bid(ride_detail)
-			print "Error : ", res
-			print type(res)
-			if "Exceeded" in res:
-				print 'test'
-				rides = ride.retrieveRide(ride_detail)
-				return render_template('addBid.html',ride=rides,fail='1')
-			elif "invalid input" in res:
-				rides = ride.retrieveRide(ride_detail)
-				return render_template('addBid.html',ride=rides,fail1='1')
-			else:
-				return redirect('/')
-		except Exception as e:
-				print e
-				return redirect('/')
+    if session.get('email') is None:
+        return redirect('/login')
+    else:
+        try:
+            reg_no = request.form['reg_no']
+            start_time = dt.datetime.strptime(
+            request.form['start_time'], '%Y-%m-%d %H:%M:%S')
+            no_pax = request.form['no_pax']
+            price = request.form['price']
+            ride_detail = {
+            'reg_no': reg_no,
+            'start_time': start_time,
+            'no_pax': no_pax,
+            'bid_price': price,
+            'email': session.get('email')
+            }
+            res = ride_bid.add_bid(ride_detail)
+            print "Error : ", res
+            print type(res)
+            if type(res) == int:
+                return redirect('/')
+            if "Exceeded" in res:
+                print 'test'
+                rides = ride.retrieveRide(ride_detail)
+                return render_template('addBid.html',ride=rides,fail='1')
+            elif "invalid input" in res:
+                rides = ride.retrieveRide(ride_detail)
+                return render_template('addBid.html',ride=rides,fail1='1')
+            else:
+                return redirect('/')
+        except Exception as e:
+            print e
+            return redirect('/')
 
 
 @app.route('/updateBid')
@@ -504,11 +506,29 @@ def Update_Bid():
             no_pax = request.form['no_pax']
             email = session.get('email')
             res = ride_bid.update_bid(email,reg_no,start_time,price,no_pax)
-            if res != -1:
-                return redirect('/')
+            ride_detail = {
+            'reg_no': reg_no,
+            'start_time': start_time,
+            'no_pax': no_pax,
+            'bid_price': price,
+            'email': session.get('email')
+            }
+            if type(res) == int:
+                if res != 0 :
+                    return redirect('/')
+                else:
+                    rides = ride.retrieveRide(ride_detail)
+                    return render_template('addBid.html',ride=rides,fail1='1')
+            if "Exceeded" in res:
+            	print 'test'
+            	rides = ride.retrieveRide(ride_detail)
+            	return render_template('addBid.html',ride=rides,fail='1')
+            elif "invalid input" in res:
+            	rides = ride.retrieveRide(ride_detail)
+            	return render_template('addBid.html',ride=rides,fail1='1')
             else:
-                return redirect('/login')
-        except ValueError:
+            	return redirect('/')
+        except Exception as e:
             return redirect('/')
 
 if __name__ == '__main__':
